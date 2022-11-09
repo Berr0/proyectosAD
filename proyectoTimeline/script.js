@@ -3,7 +3,11 @@
  */
  var Game = function() {
     // the empty slots for moving cards
+<<<<<<< Updated upstream
     this.free = [null, null, null, null];
+=======
+    this.free = [null, null, null, null,null, null, null, null];
+>>>>>>> Stashed changes
     // the spaces to hold the completed suits
     this.suits = [null, null, null, null];
     // the columns of cards
@@ -21,7 +25,11 @@ Game.prototype.init = function() {
     // shuffle the deck
     this.deck.shuffle();
 
+<<<<<<< Updated upstream
     for (var i = 0; i < 52; i++) {
+=======
+    for (var i = 0; i < 8; i++) {
+>>>>>>> Stashed changes
         // add the cards to the columns
         card = this.deck.cards[i];
         this.columns[i % 8].push(card);
@@ -34,7 +42,11 @@ Game.prototype.init = function() {
 Game.prototype.reset = function() {
     var i, col;
 
+<<<<<<< Updated upstream
     this.free = [null, null, null, null];
+=======
+    this.free = [null, null, null, null,null, null, null, null];
+>>>>>>> Stashed changes
     this.suits = [null, null, null, null];
 
     for (i = 0; i < 8; i++) {
@@ -86,7 +98,11 @@ Game.prototype.valid_drop_ids = function(card_id) {
     drag_card = this.deck.get_card(card_id);
 
     // add empty freecells
+<<<<<<< Updated upstream
     for (i = 0; i < 4; i++) {
+=======
+    for (i = 0; i < 8; i++) {
+>>>>>>> Stashed changes
         free = this.free[i];
         if (free === null) {
             drop_ids.push('free' + i.toString());
@@ -174,9 +190,15 @@ Game.prototype.move_card = function(drag_id, drop_id) {
         if (drop_id.slice(0, 1) === 'f') {
             // dropping on a freecell
             this.free[col_index] = drag_card;
+<<<<<<< Updated upstream
         } else if (drop_id.slice(0, 1) === 's') {
             // dropping on a suit cell
             this.suits[col_index] = drag_card;
+=======
+        } else if (drop_id.slice(0, 1) === 'f') {
+            // dropping on a suit cell
+            this.free[col_index] = drag_card;
+>>>>>>> Stashed changes
         } else {
             // dropping on an empty column
             this.columns[col_index].push(drag_card);
@@ -204,7 +226,11 @@ Game.prototype.pop_card = function(card_id) {
     }
 
     // check the freecells
+<<<<<<< Updated upstream
     for (i = 0; i < 4; i++) {
+=======
+    for (i = 0; i < 8; i++) {
+>>>>>>> Stashed changes
         card = this.free[i];
         if ((card !== null) && (card.id === card_id)) {
             this.free[i] = null;

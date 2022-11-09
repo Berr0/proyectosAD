@@ -1,13 +1,26 @@
+<?php
+    var_export($_POST);
+    //Se crea el mazo como un array de numeros, que representan las cartas, ya que cada carta se llama como un número
+    $Mazo = array (1,2,3,4,5,6,8,9,10,11,12,13,14,15);
+    $Mano = array ();
+    $Mano[] = 3;
+    iniciarMano();
+
+    function iniciarMano(){
+        global $Mano;
+        var_export($Mano);
+    }
+
+
+
+    
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="../../files/paf.css" />
-<<<<<<< Updated upstream
-    <link rel="stylesheet" type="text/css" href="css/freecell.css" />
-=======
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
->>>>>>> Stashed changes
     <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css" />
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
@@ -15,43 +28,39 @@
     
     <script src="script.js" type="text/javascript"></script>
 
-<<<<<<< Updated upstream
-    <title>Freecell</title>
+    <title>Timeline</title>
 </head>
 <body>
 <div id="title">
-    <h1>Fre<span id="secret">e</span>cell</h1>
-=======
-    <title>aaaa</title>
-</head>
-<body>
-<div id="title">
-    <h1>a<span id="secret">e</span>cell</h1>
->>>>>>> Stashed changes
+    <h1>Timeline</h1>
     <h2>
         <button id="newgame">New Game</button>
         <button id="help">Help</button>
     </h2>
 </div>
 <div id="table">
+    <div id="posTable">
     <div id="free0" class="free"></div>
     <div id="free1" class="free"></div>
     <div id="free2" class="free"></div>
     <div id="free3" class="free"></div>
-
-    <div id="suit0" class="suit"></div>
-    <div id="suit1" class="suit"></div>
-    <div id="suit2" class="suit"></div>
-    <div id="suit3" class="suit"></div>
-
-    <div id="col0" class="column"></div>
-    <div id="col1" class="column"></div>
-    <div id="col2" class="column"></div>
-    <div id="col3" class="column"></div>
-    <div id="col4" class="column"></div>
-    <div id="col5" class="column"></div>
-    <div id="col6" class="column"></div>
-    <div id="col7" class="column"></div>
+    <div id="free4" class="free"></div>
+    <div id="free5" class="free"></div>
+    <div id="free6" class="free"></div>
+    <div id="free7" class="free"></div>
+<div class="columnMom">
+<div id="col0" class="column1"></div>
+    <div id="col1" class="column2"></div>
+    <div id="col2" class="column3"></div>
+    <div id="col3" class="column4"></div>
+    <div id="col4" class="column5"></div>
+    <div id="col5" class="column6"></div>
+    <div id="col6" class="column7"></div>
+    <div id="col7" class="column8"></div>
+</div>
+    </div>
+ 
+    
 </div>
 
 <div id="footer">
@@ -101,3 +110,6 @@ deals can be solved.
 </div>
 
 </body>
+
+        
+</html>
