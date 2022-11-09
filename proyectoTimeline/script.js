@@ -5,7 +5,11 @@
     // the empty slots for moving cards
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     this.free = [null, null, null, null];
+=======
+    this.free = [null, null, null, null,null, null, null, null];
+>>>>>>> Stashed changes
 =======
     this.free = [null, null, null, null,null, null, null, null];
 >>>>>>> Stashed changes
@@ -31,7 +35,11 @@ Game.prototype.init = function() {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     for (var i = 0; i < 52; i++) {
+=======
+    for (var i = 0; i < 8; i++) {
+>>>>>>> Stashed changes
 =======
     for (var i = 0; i < 8; i++) {
 >>>>>>> Stashed changes
@@ -52,7 +60,11 @@ Game.prototype.reset = function() {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     this.free = [null, null, null, null];
+=======
+    this.free = [null, null, null, null,null, null, null, null];
+>>>>>>> Stashed changes
 =======
     this.free = [null, null, null, null,null, null, null, null];
 >>>>>>> Stashed changes
@@ -112,7 +124,11 @@ Game.prototype.valid_drop_ids = function(card_id) {
     // add empty freecells
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     for (i = 0; i < 4; i++) {
+=======
+    for (i = 0; i < 8; i++) {
+>>>>>>> Stashed changes
 =======
     for (i = 0; i < 8; i++) {
 >>>>>>> Stashed changes
@@ -208,9 +224,15 @@ Game.prototype.move_card = function(drag_id, drop_id) {
             this.free[col_index] = drag_card;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         } else if (drop_id.slice(0, 1) === 's') {
             // dropping on a suit cell
             this.suits[col_index] = drag_card;
+=======
+        } else if (drop_id.slice(0, 1) === 'f') {
+            // dropping on a suit cell
+            this.free[col_index] = drag_card;
+>>>>>>> Stashed changes
 =======
         } else if (drop_id.slice(0, 1) === 'f') {
             // dropping on a suit cell
@@ -250,7 +272,11 @@ Game.prototype.pop_card = function(card_id) {
     // check the freecells
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     for (i = 0; i < 4; i++) {
+=======
+    for (i = 0; i < 8; i++) {
+>>>>>>> Stashed changes
 =======
     for (i = 0; i < 8; i++) {
 >>>>>>> Stashed changes
