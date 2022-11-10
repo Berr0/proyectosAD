@@ -1,5 +1,4 @@
 <?php
-    var_export($_POST);
     //Se crea el mazo como un array de numeros, que representan las cartas, ya que cada carta se llama como un número
     $Mazo = array (1,2,3,4,5,6,8,9,10,11,12,13,14,15);
     $Mano = array ();
@@ -8,7 +7,6 @@
 
     function iniciarMano(){
         global $Mano;
-        var_export($Mano);
     }
 
 
@@ -26,7 +24,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js" type="text/javascript"></script>
     
-    <script src="script.js" type="text/javascript"></script>
+
 
     <title>Timeline</title>
 </head>
@@ -39,6 +37,63 @@
     </h2>
 </div>
 <div id="table">
+
+
+<section class="main-carousel">
+	<button class="button-arrow -left" title="Clique para voltar">
+		<span class="content">Voltar</span>
+	</button>
+
+	<div class="items">
+		<div class="cards">
+			<article class="node-card">
+				<h2 class="main-title -second">2012</h2>
+				<div class="logo" >
+					<img src="https://i.ibb.co/G2rg5jQ/logo-locaweb.png" id="celda" alt="Logo da Locaweb">
+				</div>
+			</article>
+
+			<article class="node-card">
+				<h2 class="main-title -second">2014</h2>
+				<div class="logo -no-padding">
+					<img class="image" src="https://i.ibb.co/ByHFYcf/logo-caelum.png" alt="Logo da Caelum">
+				</div>
+			</article>
+
+			<article class="node-card">
+				<h2 class="main-title -second">2016</h2>
+				<div class="logo -bg-red">
+					<img src="https://i.ibb.co/nRCkymQ/logo-getninjas.png" alt="Logo da GetNinjas">
+				</div>
+			</article>
+
+			<article class="node-card">
+				<h2 class="main-title -second">2017</h2>
+				<div class="logo -no-padding">
+					<img class="image" src="https://i.ibb.co/ByHFYcf/logo-caelum.png" alt="Logo da Caelum">
+				</div>
+			</article>
+
+			<article class="node-card">
+				<h2 class="main-title -second">2018</h2>
+				<div class="logo">
+					<img src="https://i.ibb.co/FBxTkK1/logo-impulso.png" alt="Logo da Impulso">
+				</div>
+			</article>
+
+			<article class="node-card">
+				<h2 class="main-title -second">2019</h2>
+				<div class="logo -bg-red">
+					<img src="https://i.ibb.co/XSmBYKm/logo-collabcode.png" alt="Logo da CollabCode">
+				</div>
+			</article>
+		</div>
+	</div>
+
+	<button class="button-arrow -right" title="Clique para avançar">
+		<span class="content">Avançar</span>
+	</button>
+</section>
     <div id="posTable">
     <div id="free0" class="free"></div>
     <div id="free1" class="free"></div>
@@ -59,7 +114,6 @@
     <div id="col7" class="column8"></div>
 </div>
     </div>
- 
     
 </div>
 
@@ -109,7 +163,12 @@ deals can be solved.
 </p>
 </div>
 
+
 </body>
+
+<script src="timelineGUI.js" type="text/javascript"></script>
+<script src="script.js" type="text/javascript"></script>
+
 
         
 </html>

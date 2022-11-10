@@ -309,7 +309,7 @@ Game.prototype.Deck.prototype.shuffle = function() {
 Game.prototype.Deck.prototype.get_card = function(card_id) {
     var i, card;
 
-    for (i = 0; i < 52; i++) {
+    for (i = 0; i < 8; i++) {
         card = this.cards[i];
         if (card_id === card.id) {
             return card;
@@ -423,6 +423,8 @@ UI.prototype.add_cards = function() {
         }
     }
 };
+
+
 
 /**
  * Remove the cards from the user interface
@@ -608,7 +610,8 @@ UI.prototype.create_droppables = function() {
 
                     // tell the game that the card has moved
                     this_ui.game.move_card(drag_id, this_id);
-
+                    
+                    UI.prototype.add_cards_car(drag_id);
                     // has the game been completed
                     this_ui.is_won();
 
@@ -752,6 +755,13 @@ UI.prototype.win = function() {
     });
 };
 
+UI.prototype.add_cards_car = function(drag_id){
+    var img 
+    img = new Image();
+ //   document.write(card_id)
+    document.getElementById('celda').src =  'images/' + drag_id + '.png';
+}
+
 /**
  * The help dialog
  */
@@ -782,6 +792,7 @@ UI.prototype.new_game = function() {
     });
 };
 
+
 /******************************************************************************/
 
 var my_ui;
@@ -793,3 +804,4 @@ $(document).ready(function() {
     my_ui = new UI(g);
     my_ui.init();
 });
+
