@@ -42,6 +42,7 @@ ul {
 .columnMom {
   position: absolute;
   float: left;
+  
 }
 
 .columnMom > div {
@@ -87,7 +88,7 @@ ul {
 #posTable {
    width: 750px;
    height: 400px;
-   margin: 0 550px auto;
+   margin: 0 700px auto;
    padding: 10px;
    position: relative;
    background-color: #006699;}
@@ -245,7 +246,7 @@ button {
  position: absolute;
  bottom: 140px;
 
- width: 40px;
+ width: 20px;
  height: 0;
  box-sizing: border-box;
 

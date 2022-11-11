@@ -3,11 +3,13 @@
  */
  var Game = function() {
     // the empty slots for moving cards
-    this.free = [null, null, null, null,null, null, null, null];
+    this.free = [null, null, null, null];
     // the spaces to hold the completed suits
     this.suits = [null, null, null, null];
     // the columns of cards
-    this.columns = [[], [], [], [], [], [], [], []];
+    this.columns = [[], [], [], []];
+    // the years in game
+    this.year = [1492,1789,1914,1936,1939,1945,1969,1989,1990,2001]
     // the deck of cards
     this.deck = new this.Deck();
 };
@@ -21,10 +23,10 @@ Game.prototype.init = function() {
     // shuffle the deck
     this.deck.shuffle();
 
-    for (var i = 0; i < 8; i++) {
+    for (var i = 0; i < 4; i++) {
         // add the cards to the columns
         card = this.deck.cards[i];
-        this.columns[i % 8].push(card);
+        this.columns[i % 4].push(card);
     }
 };
 
@@ -34,10 +36,9 @@ Game.prototype.init = function() {
 Game.prototype.reset = function() {
     var i, col;
 
-    this.free = [null, null, null, null,null, null, null, null];
-    this.suits = [null, null, null, null];
+    this.free = [null, null, null, null];
 
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 4; i++) {
         col = this.columns[i];
         col.length = 0;
     }
@@ -61,7 +62,7 @@ Game.prototype.valid_drag_ids = function() {
         }
     }
     // add cards at the bottom of columns
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 4; i++) {
         col = this.columns[i];
         col_len = col.length;
         if (col_len > 0) {
@@ -72,6 +73,8 @@ Game.prototype.valid_drag_ids = function() {
 
     return drag_ids;
 };
+
+//Aqui tenemos los id de los huecos y las cartas
 
 /**
  * Create an array of ids of valid drop locations for the card. The ids are
@@ -86,7 +89,18 @@ Game.prototype.valid_drop_ids = function(card_id) {
     drag_card = this.deck.get_card(card_id);
 
     // add empty freecells
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 4; i++) {
+        free = this.free[i];
+        if (free === null) {
+            drop_ids.push('free' + i.toString());
+        }
+    }
+    // add empty datascells
+   /* for (i = 0; i < this.year.length() ; i++)
+    {
+       $("#main-carousel").append('<article class="node-card"><h2 class="main-title -second">' + year[i] + '</h2> );
+    }*/
+    for (i = 0; i < 4; i++) {
         free = this.free[i];
         if (free === null) {
             drop_ids.push('free' + i.toString());
@@ -123,13 +137,13 @@ Game.prototype.valid_drop_ids = function(card_id) {
     }
 
     // add an empty column as a valid drop location
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 4; i++) {
         col = this.columns[i];
         if (col.length === 0) {
             drop_ids.push('col' + i.toString());
         }
     }
-
+    
     return drop_ids;
 };
 
@@ -141,7 +155,7 @@ Game.prototype.col_bottom_cards = function() {
 
     bottom_cards = [];
 
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 4; i++) {
         col = this.columns[i];
         card_count = col.length;
         if (card_count > 0) {
@@ -192,7 +206,7 @@ Game.prototype.pop_card = function(card_id) {
     var i, col, card;
 
     // check the bottom of each column
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 4; i++) {
         col = this.columns[i];
         if (col.length === 0) {
             continue;
@@ -222,7 +236,7 @@ Game.prototype.pop_card = function(card_id) {
 Game.prototype.push_card = function(card, drop_id) {
     var i, col, col_len, bottom_card;
 
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 4; i++) {
         col = this.columns[i];
         col_len = col.length;
         if (col_len === 0) {
@@ -255,10 +269,11 @@ Game.prototype.is_game_won = function() {
 
 /**
  * Deck object - contains an array of Cards.
- */
+ *//*Llamaremos a las imagenes: año.png de forma que se comparen con las celdas del timeline y las cartas*/
 Game.prototype.Deck = function() {
-    var suits, values, colours, i, suit, value;
+    var suits, values, colours, i, suit, value, year;
 
+    year = [1492,1789,1914,1936,1939,1945,1969,1989,1990,2001]
     suits = ['clubs', 'spades', 'hearts', 'diamonds'];
     values = [1, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2];
     colours = {'clubs': 'black',
@@ -270,7 +285,7 @@ Game.prototype.Deck = function() {
     for (i = 0; i < 52; i++) {
         suit = suits[i % 4];
         value = values[Math.floor(i / 4)];
-        this.cards.push(new this.Card(i + 1, suit, value, colours[suit]));
+        this.cards.push(new this.Card(/*year[i]*/i+1, suit, value, colours[suit]));
     }
 };
 
@@ -400,7 +415,7 @@ UI.prototype.init = function() {
 UI.prototype.add_cards = function() {
     var i, j, cards, num_cards, col_div, card, img, card_div;
 
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 4; i++) {
         cards = this.game.columns[i];
         num_cards = cards.length;
 
@@ -460,7 +475,7 @@ UI.prototype.create_draggables = function() {
             stack: '.card',
             containment: '#table',
             revert: 'invalid',
-            revertDuration: 200,
+            revertDuration: 800,
             start: this_ui.create_droppables(),
             stop: this_ui.clear_drag()
         });
@@ -495,15 +510,6 @@ UI.prototype.dblclick_draggable = function(event) {
     card_id = parseInt(this.id, 10);
     drop_ids = this_ui.game.valid_drop_ids(card_id);
     drop_len = drop_ids.length;
-
-    // can the card be moved to a suit cell
-    for (i = 0; i < drop_len; i++) {
-        drop_id = drop_ids[i];
-        if (drop_id.substr(0, 4) === 'suit') {
-            this_ui.dblclick_move(card_id, drop_id, this_ui);
-            return;
-        }
-    }
 
     // can the card be moved to an empty freecell
     for (i = 0; i < drop_len; i++) {
