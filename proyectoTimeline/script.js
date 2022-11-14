@@ -3,13 +3,12 @@
  */
  var Game = function() {
     // the empty slots for moving cards
-    this.free = [null, null, null, null];
-    // the spaces to hold the completed suits
+    this.free = [null, null, null, null, null, null, null, null,null,null]
     this.suits = [null, null, null, null];
     // the columns of cards
     this.columns = [[], [], [], []];
     // the years in game
-    this.year = [1492,1789,1914,1936,1939,1945,1969,1989,1990,2001]
+    this.year = ["1492","1789","1914","1936","1939","1945","1969","1989","1990","2001"]
     // the deck of cards
     this.deck = new this.Deck();
 };
@@ -36,7 +35,7 @@ Game.prototype.init = function() {
 Game.prototype.reset = function() {
     var i, col;
 
-    this.free = [null, null, null, null];
+    this.free = [null, null, null, null, null, null, null, null,null,null]
 
     for (i = 0; i < 4; i++) {
         col = this.columns[i];
@@ -55,7 +54,7 @@ Game.prototype.valid_drag_ids = function() {
     drag_ids = [];
 
     // add cards in freecell spaces
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < this.year.length; i++) {
         card = this.free[i];
         if (card !== null) {
             drag_ids.push(card.id.toString());
@@ -89,7 +88,7 @@ Game.prototype.valid_drop_ids = function(card_id) {
     drag_card = this.deck.get_card(card_id);
 
     // add empty freecells
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < this.year.length; i++) {
         free = this.free[i];
         if (free === null) {
             drop_ids.push('free' + i.toString());
@@ -100,7 +99,7 @@ Game.prototype.valid_drop_ids = function(card_id) {
     {
        $("#main-carousel").append('<article class="node-card"><h2 class="main-title -second">' + year[i] + '</h2> );
     }*/
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 11; i++) {
         free = this.free[i];
         if (free === null) {
             drop_ids.push('free' + i.toString());
@@ -108,22 +107,7 @@ Game.prototype.valid_drop_ids = function(card_id) {
     }
 
     // add a valid suit cell (if any)
-    for (i = 0; i < 4; i++) {
-        suit_card = this.suits[i];
-        if (suit_card === null) {
-            // if the card being dragged is an ace then this is a valid drop
-            if (drag_card.value === 1) {
-                drop_ids.push('suit' + i.toString());
-            }
-        } else {
-            // is the card being dragged the next in the suit sequence to the
-            // card in the suit cell - then valid drop
-            if ((drag_card.suit === suit_card.suit) &&
-                (drag_card.value === suit_card.value + 1)) {
-                drop_ids.push('suit' + i.toString());
-            }
-        }
-    }
+
 
     // add a valid card at the bottom of a column
     bottom_cards = this.col_bottom_cards();
@@ -188,9 +172,6 @@ Game.prototype.move_card = function(drag_id, drop_id) {
         if (drop_id.slice(0, 1) === 'f') {
             // dropping on a freecell
             this.free[col_index] = drag_card;
-        } else if (drop_id.slice(0, 1) === 'f') {
-            // dropping on a suit cell
-            this.free[col_index] = drag_card;
         } else {
             // dropping on an empty column
             this.columns[col_index].push(drag_card);
@@ -218,7 +199,7 @@ Game.prototype.pop_card = function(card_id) {
     }
 
     // check the freecells
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 10; i++) {
         card = this.free[i];
         if ((card !== null) && (card.id === card_id)) {
             this.free[i] = null;
@@ -254,11 +235,11 @@ Game.prototype.push_card = function(card, drop_id) {
  * Has the game been won?
  */
 Game.prototype.is_game_won = function() {
-    var i, card;
+    var i,j, card;
 
     for (i = 0; i < 4; i++) {
-        card = this.suits[i];
-        if (card === null || card.value !== 13) {
+            card = this.free;
+        if (card[i] == null) {
             return false;
         }
     }
@@ -577,9 +558,10 @@ UI.prototype.card_max_zindex = function() {
 UI.prototype.create_droppables = function() {
     var this_ui;
     this_ui = this;
+    year = ["1492","1789","1914","1936","1939","1945","1969","1989","1990","2001"]
 
     var droppers = function(event, ui) {
-        var drop_ids, i, drop_id, drag_id, drop_div;
+        var drop_ids, i, j,drop_id, drag_id, drop_div,aux;
 
         drag_id = parseInt($(this).attr('id'), 10);
         drop_ids = this_ui.game.valid_drop_ids(drag_id);
@@ -595,6 +577,7 @@ UI.prototype.create_droppables = function() {
                     var card_offset, this_id;
 
                     this_id = $(this).attr('id');
+                    this_class = $(this).attr('class');
                     if (this_id.length <= 2) {
                         // this is a card
                         card_offset = '0 25';
@@ -616,8 +599,18 @@ UI.prototype.create_droppables = function() {
 
                     // tell the game that the card has moved
                     this_ui.game.move_card(drag_id, this_id);
+
+                    //Muestra el articulo, en base a el espacio donde se pone
+                    //TODO: Modificar codigo para que funcione con los id de year y no free
+                    aux = i.toString();
+                    for (j = 0; j < year.length; j++) {
+                    if (this_id == "free"+j.toString()) {
+                        UI.prototype.mostrarArticulo(year[j])
+                        UI.prototype.mostrarFree(this_id)
+                        UI.prototype.add_cards_car(drag_id, year[j]);
+                    }}
                     
-                    UI.prototype.add_cards_car(drag_id);
+
                     // has the game been completed
                     this_ui.is_won();
 
@@ -631,6 +624,39 @@ UI.prototype.create_droppables = function() {
 
     return droppers;
 };
+
+/*Show article depending on */
+
+UI.prototype.mostrarArticulo=function(id) {
+    var x = document.getElementsByClassName(id);
+    for (i = 0; i < x.length; i++) {
+    if (x[i].style.display === "none") {
+      x[i].style.display = "flex";
+    } else {
+      x[i].style.display = "none";
+    }
+    }
+  }
+  UI.prototype.mostrarFree=function(idInicio) {
+
+    auxFree = idInicio.slice(0, 4)
+    auxNum = idInicio.slice(4, 5)
+    auxNumMas = parseInt(auxNum)+1
+    auxNumMenos = parseInt(auxNum)-1
+    var x = document.getElementById(auxFree+auxNumMas);
+    var y = document.getElementById(auxFree+auxNumMenos);
+   // var y = document.getElementById(id);
+    if (x.style.display === "none") {
+      x.style.display = "inline";
+    } else {
+      x.style.display = "none";
+    }
+    if (y.style.display === "none") {
+        y.style.display = "inline";
+      } else {
+        y.style.display = "none";
+      }
+  }
 
 /*
  * Clear all drag items
@@ -753,7 +779,7 @@ UI.prototype.setup_secret = function() {
  */
 UI.prototype.win = function() {
     $('#windialog').dialog({
-        title: 'Freecell',
+        title: 'Winner Winner Chicken Dinner',
         modal: true,
         show: 'blind',
         autoOpen: false,
@@ -761,11 +787,20 @@ UI.prototype.win = function() {
     });
 };
 
-UI.prototype.add_cards_car = function(drag_id){
+UI.prototype.add_cards_car = function(drag_id, drop_id){
     var img 
+    year = ["1492","1789","1914","1936","1939","1945","1969","1989","1990","2001"]
     img = new Image();
  //   document.write(card_id)
-    document.getElementById('celda').src =  'images/' + drag_id + '.png';
+ //celda se cambiará por drag_id, que será el id de la carta, este id será una fecha
+ var x = document.getElementById("celda"+drop_id);
+
+ for (i = 0; i < year.length; i++) {
+
+    if(year[i] == drop_id){
+        x.src =  'images/' + drag_id + '.png';
+    }
+}
 }
 
 /**
@@ -798,7 +833,6 @@ UI.prototype.new_game = function() {
     });
 };
 
-
 /******************************************************************************/
 
 var my_ui;
@@ -810,4 +844,3 @@ $(document).ready(function() {
     my_ui = new UI(g);
     my_ui.init();
 });
-
