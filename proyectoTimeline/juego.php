@@ -78,13 +78,14 @@
        echo' </div>';
          };
          ?>
-<div class="columnMom">
+
+    </div>
+    <div class="columnMom">
 	<div id="col0" class="column1"></div>
     <div id="col1" class="column2"></div>
     <div id="col2" class="column3"></div>
     <div id="col3" class="column4"></div>
 </div>
-    </div>
 </div>
 <div id="footer">
 </div>

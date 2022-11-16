@@ -1,10 +1,14 @@
 /**
- * Encapsulate the game
+ * Encapsulamos la partida
  */
+ var yearPuesto=new Array; 
+ var yearIndex=new Array; 
+ var yearFree=new Array; 
+ var cont = 0
+
  var Game = function() {
     // the empty slots for moving cards
     this.free = [null, null, null, null, null, null, null, null,null,null]
-    this.suits = [null, null, null, null];
     // the columns of cards
     this.columns = [[], [], [], []];
     // the years in game
@@ -14,7 +18,7 @@
 };
 
 /**
- * Initialise the game object.
+ * Inicializamos el objeto Game.
  */
 Game.prototype.init = function() {
     var card;
@@ -30,7 +34,7 @@ Game.prototype.init = function() {
 };
 
 /**
- * Reset the game
+ * Reset del juego
  */
 Game.prototype.reset = function() {
     var i, col;
@@ -46,7 +50,7 @@ Game.prototype.reset = function() {
 };
 
 /**
- * Create an array of ids of the valid draggable cards.
+ * Crear un array de ids con las cartas draggeables validas
  */
 Game.prototype.valid_drag_ids = function() {
     var drag_ids, i, card, col, col_len;
@@ -76,8 +80,8 @@ Game.prototype.valid_drag_ids = function() {
 //Aqui tenemos los id de los huecos y las cartas
 
 /**
- * Create an array of ids of valid drop locations for the card. The ids are
  * the id attribute string in the DOM.
+ * Crear un array de ids de los drops de la carta, 
  */
 Game.prototype.valid_drop_ids = function(card_id) {
     var drop_ids, i, free, suit_card, drag_card, bottom_cards, card, col;
@@ -94,7 +98,7 @@ Game.prototype.valid_drop_ids = function(card_id) {
             drop_ids.push('free' + i.toString());
         }
     }
-    // add empty datascells
+    // Añadir datascells vacias
    /* for (i = 0; i < this.year.length() ; i++)
     {
        $("#main-carousel").append('<article class="node-card"><h2 class="main-title -second">' + year[i] + '</h2> );
@@ -106,21 +110,16 @@ Game.prototype.valid_drop_ids = function(card_id) {
         }
     }
 
-    // add a valid suit cell (if any)
 
-
-    // add a valid card at the bottom of a column
+    // añadir carta valida a la columna
     bottom_cards = this.col_bottom_cards();
     for (i = 0; i < bottom_cards.length; i++) {
         card = bottom_cards[i];
-
-        if ((card.value === drag_card.value + 1) &&
-            (card.colour !== drag_card.colour)) {
             drop_ids.push(card.id.toString());
-        }
+        
     }
 
-    // add an empty column as a valid drop location
+    // añadir columna vacía como drop
     for (i = 0; i < 4; i++) {
         col = this.columns[i];
         if (col.length === 0) {
@@ -132,7 +131,7 @@ Game.prototype.valid_drop_ids = function(card_id) {
 };
 
 /*
- * Return an array of the cards that are at the bottom of columns
+ * Devuelve un array de cartas da las columnas
  */
 Game.prototype.col_bottom_cards = function() {
     var i, col, card_count, bottom_cards;
@@ -151,22 +150,20 @@ Game.prototype.col_bottom_cards = function() {
 };
 
 /**
- * Move a card to a new location
- *  drag_id is an integer
- *  drop_id is a string
+ * movemos una carta a otro sitio
  */
 Game.prototype.move_card = function(drag_id, drop_id) {
     var drag_card, col_index;
 
-    // pop the card from its current location
+    // popeamos la carta de su sitio actual
     drag_card = this.pop_card(drag_id);
 
     if (drop_id.length <= 2) {
-        // dropping this card on another card in column
+        // dropeamos la carta en otra columna
         drop_id = parseInt(drop_id, 10);
         this.push_card(drag_card, drop_id);
     } else {
-        // dropping on a freecell or suit cell or empty column
+        // dropear en una free o columna vacia
         // the index of
         col_index = parseInt(drop_id.charAt(drop_id.length - 1), 10);
         if (drop_id.slice(0, 1) === 'f') {
@@ -180,13 +177,13 @@ Game.prototype.move_card = function(drag_id, drop_id) {
 };
 
 /**
- * Return the card object and remove it from its current location
- * card_id is an integer.
+ * card_id es un integer.
+ * Devuelve el objeto carta y lo quita de su posición actual
  */
 Game.prototype.pop_card = function(card_id) {
     var i, col, card;
 
-    // check the bottom of each column
+    // Revisa todas las columnas
     for (i = 0; i < 4; i++) {
         col = this.columns[i];
         if (col.length === 0) {
@@ -198,7 +195,7 @@ Game.prototype.pop_card = function(card_id) {
         }
     }
 
-    // check the freecells
+    // Revisa las free
     for (i = 0; i < 10; i++) {
         card = this.free[i];
         if ((card !== null) && (card.id === card_id)) {
@@ -206,13 +203,13 @@ Game.prototype.pop_card = function(card_id) {
             return card;
         }
     }
-    // shouldn't reach this point - should always find card
+    // nunca debería llegar a este putno, siempre deben haber cartas
     alert('error in Game.pop_card()');
     return null;
 };
 
 /**
- * Push the card onto the end of a column based on the id of the bottom card
+ * Mueve la carta a una columna basado en el if de la carta 
  */
 Game.prototype.push_card = function(card, drop_id) {
     var i, col, col_len, bottom_card;
@@ -232,7 +229,7 @@ Game.prototype.push_card = function(card, drop_id) {
 };
 
 /**
- * Has the game been won?
+ * Se ha ganado el juego?
  */
 Game.prototype.is_game_won = function() {
     var i,j, card;
@@ -249,34 +246,25 @@ Game.prototype.is_game_won = function() {
 /******************************************************************************/
 
 /**
- * Deck object - contains an array of Cards.
+ * El objeto baraja contiene un array de cartas.
  *//*Llamaremos a las imagenes: año.png de forma que se comparen con las celdas del timeline y las cartas*/
 Game.prototype.Deck = function() {
-    var suits, values, colours, i, suit, value, year;
-
+    var i, year;
     year = [1492,1789,1914,1936,1939,1945,1969,1989,1990,2001]
-    suits = ['clubs', 'spades', 'hearts', 'diamonds'];
-    values = [1, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2];
-    colours = {'clubs': 'black',
-               'spades': 'black',
-               'hearts': 'red',
-               'diamonds': 'red'};
-
     this.cards = [];
-    for (i = 0; i < 52; i++) {
-        suit = suits[i % 4];
-        value = values[Math.floor(i / 4)];
-        this.cards.push(new this.Card(/*year[i]*/i+1, suit, value, colours[suit]));
+    
+    for (i = 0; i < year.length; i++) {
+        this.cards.push(new this.Card(i+1,year[i]));
     }
 };
 
 /**
- * shuffle the deck of cards
+ * Barajeamos las cartas en el mazo
  */
 Game.prototype.Deck.prototype.shuffle = function() {
     var len, i, j, item_j;
 
-    // useful for debugging - deal the cards in optimal order
+    // Util para debug, saca las cartas en el orden optimo
     /*
     this.cards.sort(function(a, b) {
         if (a.value < b.value) {
@@ -300,7 +288,7 @@ Game.prototype.Deck.prototype.shuffle = function() {
 };
 
 /**
- * Get the card by its id
+ * Saca la carta por el id
  */
 Game.prototype.Deck.prototype.get_card = function(card_id) {
     var i, card;
@@ -321,45 +309,22 @@ Game.prototype.Deck.prototype.get_card = function(card_id) {
 /**
  * Card object
  */
-Game.prototype.Deck.prototype.Card = function(id, suit, value, colour) {
+Game.prototype.Deck.prototype.Card = function(id,year) {
+    this.year = year;
     this.id = id;
-    this.suit = suit;
-    this.value = value;
-    this.colour = colour;
-};
-
-/**
- * does this card and another card share the same suit?
- */
-Game.prototype.Deck.prototype.Card.prototype.sameSuit = function(other) {
-    return this.suit === other.suit;
-};
-
-/**
- * does this card and another card share the same colour?
- */
-Game.prototype.Deck.prototype.Card.prototype.sameColour = function(other) {
-    return this.colour === other.colour;
-};
-
-/**
- * does this card and another card share the same value?
- */
-Game.prototype.Deck.prototype.Card.prototype.sameValue = function(other) {
-    return this.value === other.value;
 };
 
 /**
  * The image name and location as a string. Used when creating the web page.
  */
 Game.prototype.Deck.prototype.Card.prototype.image = function() {
-    return 'images/' + this.id.toString() + '.png';
+    return 'images/' + this.year.toString() + '.png';
 };
 
 /******************************************************************************/
 
 /**
- * The user interface
+ * La interfaz de usuario
  */
 var UI = function(game) {
     this.game = game;
@@ -367,31 +332,34 @@ var UI = function(game) {
     this.drag = [];
     // an array of all the droppables
     this.drop = [];
+
+    this.yearPuesto = [];
+
 };
 
 /**
- * Initialise the user interface
+ * Inicializamos la interfaz de usuario
  */
 UI.prototype.init = function() {
     this.game.init();
 
     this.add_cards();
 
-    // set up the win dialog
+    // Creamos el popup de victoria
     this.win();
-    // set up the new game button
+    // Creamos el botón de juego nuevo
     this.new_game();
-    // set up the help dialog and button
+    // Creamos el dialogo de ayuda y el popup
     this.help();
 
     this.setup_secret();
 
-    // initialise draggables
+    // inicializamos draggables
     this.create_draggables();
 };
 
 /**
- * Add cards to the user interface
+ * Añadir cartas a la interfaz de usuario
  */
 UI.prototype.add_cards = function() {
     var i, j, cards, num_cards, col_div, card, img, card_div;
@@ -400,11 +368,12 @@ UI.prototype.add_cards = function() {
         cards = this.game.columns[i];
         num_cards = cards.length;
 
-        // get a reference to the column div
+        // mete refencia en el div de columna
         col_div = document.getElementById('col' + i.toString());
 
         for (j = 0; j < num_cards; j++) {
-            // add card divs to the column div
+            // añade divs de carta al div columna
+
             card = cards[j];
             img = new Image();
             img.src = card.image();
@@ -423,7 +392,7 @@ UI.prototype.add_cards = function() {
 
 
 /**
- * Remove the cards from the user interface
+ * Quita las cartas de la interfaz de usuario
  */
 UI.prototype.remove_cards = function() {
     var i;
@@ -435,8 +404,7 @@ UI.prototype.remove_cards = function() {
 };
 
 /**
- * Create draggables: cards in the freecells and at the bottoms of all the
- * columns can be dragged.
+ * Creamos draggables: Cartas en las free y en las columnas pueden moverse
  */
 UI.prototype.create_draggables = function() {
     var card_ids, card_count, i, id, card_div, this_ui;
@@ -449,7 +417,7 @@ UI.prototype.create_draggables = function() {
         id = card_ids[i];
         card_div = $('#' + id);
 
-        // add to the list of draggables
+        // Añade a la lista de draggables
         this_ui.drag.push(card_div);
 
         card_div.draggable({
@@ -462,15 +430,15 @@ UI.prototype.create_draggables = function() {
         });
         card_div.draggable('enable');
 
-        // add double-click event handling to all draggables
+        // Añade el evento doble click a todos los draggables
         card_div.bind('dblclick', {this_ui: this_ui}, this_ui.dblclick_draggable);
 
         card_div.hover(
-            // hover start
+            // hover 
             function(event) {
                 $(this).addClass('highlight');
             },
-            // hover end
+            // hover fin
             function(event) {
                 $(this).removeClass('highlight');
             }
@@ -479,9 +447,8 @@ UI.prototype.create_draggables = function() {
 };
 
 /**
- * When a draggable card is at the bottom of a column and it is double-clicked,
- * check if it can be moved to a foundation column or empty freecell. If it can,
- * then move it.
+ * Cuando una carta draggable está en una columna y se hace doble click, se revisa si se puede mover a otra columna 
+ * o a un free vacio, si puede entonces se mueve
  */
 UI.prototype.dblclick_draggable = function(event) {
     var this_ui, drop_ids, card_id, drop_len, i, drop_id, drop_div;
@@ -516,11 +483,11 @@ UI.prototype.dblclick_move = function(card_id, drop_id, this_ui) {
     left_current = offset_current['left'];
     top_current = offset_current['top'];
 
-    // add 3 for border
+    // Añade 3 al borde
     left_move = left_end - left_current + 3;
     top_move = top_end - top_current + 3;
 
-    // before moving the card, stack it on top of all other cards
+    // Antes de mover una carta, se stackea en el resto
     max_z = this_ui.card_max_zindex();
     card.css('z-index', max_z + 1);
 
@@ -547,13 +514,12 @@ UI.prototype.card_max_zindex = function() {
 };
 
 /**
- * Create droppables: when a card is dragged, decide where it can be dropped.
- * this method should be called when a card drag is started.
- *
- * This method should use Game methods to make decisions.
- *
- * use this as the callback for the start event of the drag. This is why it has
- * the two parameters (event, ui).
+ * Crea droppables: Cuando una carta se mueve, se decide donde se dropea. Este metodo debe usarse al iniciar
+ * un drag de carta
+ * 
+ * Este metodo debe usar metodos de Game para tomar decisiones
+ * 
+ * Usa este como callback para el inicio del evento del drag, por esto tiene 2 parametros (event, ui)
  */
 UI.prototype.create_droppables = function() {
     var this_ui;
@@ -569,27 +535,26 @@ UI.prototype.create_droppables = function() {
         for (i = 0; i < drop_ids.length; i++) {
             drop_id = drop_ids[i];
             drop_div = $('#' + drop_id.toString());
-            // add to array of droppables
+            // Añade al array de dropeables
             this_ui.drop.push(drop_div);
             drop_div.droppable({
-                // callback for drop event
                 drop: function(event, ui) {
                     var card_offset, this_id;
 
                     this_id = $(this).attr('id');
                     this_class = $(this).attr('class');
                     if (this_id.length <= 2) {
-                        // this is a card
+                        // Esto es una carta
                         card_offset = '0 25';
                     } else if (this_id.charAt(0) === 'c') {
-                        // this is an empty column
+                        // Esto es una column vacia
                         card_offset = '1 1';
                     } else {
-                        // this is a freecell or suit cell
+                        // Esto es un free
                         card_offset = '3 3';
                     }
 
-                    // move the droppable to the correct position
+                    // mueve droppeable a la posición correcta
                     ui.draggable.position({
                         of: $(this),
                         my: 'left top',
@@ -597,24 +562,25 @@ UI.prototype.create_droppables = function() {
                         offset: card_offset
                     });
 
-                    // tell the game that the card has moved
+                    // Le dice al juego que una carta se movió
                     this_ui.game.move_card(drag_id, this_id);
 
                     //Muestra el articulo, en base a el espacio donde se pone
                     //TODO: Modificar codigo para que funcione con los id de year y no free
                     aux = i.toString();
-                    for (j = 0; j < year.length; j++) {
-                    if (this_id == "free"+j.toString()) {
-                        UI.prototype.mostrarArticulo(year[j])
-                        UI.prototype.mostrarFree(this_id)
-                        UI.prototype.add_cards_car(drag_id, year[j]);
-                    }}
-                    
+                    UI.prototype.filtrarFallo(year[drag_id-1],this_id)
 
-                    // has the game been completed
+                    for (j = 0; j < year.length; j++) {
+                    
+                        UI.prototype.mostrarArticulo(year[drag_id-1])
+                        UI.prototype.mostrarFree(this_id,year[drag_id-1])
+                        UI.prototype.add_cards_car(year[drag_id-1], year[drag_id-1]);
+                    }
+
+                    // Se ha completado el juego?
                     this_ui.is_won();
 
-                    // reset ui so that there are no droppables
+                    // reset ui para parar los dropeables
                     this_ui.clear_drop();
                 }
             });
@@ -625,7 +591,46 @@ UI.prototype.create_droppables = function() {
     return droppers;
 };
 
-/*Show article depending on */
+/*Enseña articulo basado en el año */
+
+UI.prototype.filtrarFallo=function(year,idInicio) {
+    yearPuesto.push(year)
+
+    // Necesitamos sacar los frees que vamos poniendo, para comparar si es derecha o izquierda la posición de la carta actual, si la actual es mayor eso es que está a la derecha
+    // Poner un if que filtre por idInicio comparando como string si es un freeNormal o Aux
+    auxFree = idInicio.slice(0, 4)
+    auxNum = idInicio.slice(4, 5)
+// Necesito un crear un array de años para filtrar por free y sacar el indice de todos huecos con carta y filtrar por ellos
+// Tanto el indice de la posición en un free de la carta como el año de la carta, deben ser mayores si están a la izquierda de todas las cartas puestas
+// meto enel 5(1945), luego en el 3(1936), y en el 4(1956)
+//Representación: Al meter el 4º
+//     1936                        1956                       1945        
+//   Revisa el 1º               Revisa el 2º                  Salta fallo,
+// Es menor el año? si? -       Es menor el año? no?          Está a la derecha de un añor mayor que el.
+// -> está a la derecha? ok     Está a la izquierda? X
+    if(idInicio == "free5"){
+        //Primer free
+    yearFree.push(auxNum)
+      //  yearFreep = 
+    }else if(idInicio != "free5" && auxNum < yearFree.reverse()[0]){
+        //Izquierda
+        if(year > yearPuesto){
+         alert ("Fallaste en la posición!");
+         document.getElementById("newgame").click();         
+         }
+
+    }else if(idInicio != "free5" && auxNum > yearFree[0]){
+        //derecha
+        if(year < yearPuesto){
+
+        alert ("Fallaste en la posición!");
+        document.getElementById("newgame").click();         
+    }
+    }
+    yearFree.push(auxNum)
+
+    cont++;
+  }
 
 UI.prototype.mostrarArticulo=function(id) {
     var x = document.getElementsByClassName(id);
@@ -637,10 +642,36 @@ UI.prototype.mostrarArticulo=function(id) {
     }
     }
   }
-  UI.prototype.mostrarFree=function(idInicio) {
+  UI.prototype.mostrarFree=function(idInicio, year) {
+    
+    years = ["1492","1789","1914","1936","1939","1945","1969","1989","1990","2001"];
+    yearPuesto.push(year)
 
+    // Necesitamos sacar los frees que vamos poniendo, para comparar si es derecha o izquierda la posición de la carta actual, si la actual es mayor eso es que está a la derecha
+    // Poner un if que filtre por idInicio comparando como string si es un freeNormal o Aux
     auxFree = idInicio.slice(0, 4)
     auxNum = idInicio.slice(4, 5)
+
+  // 
+  //  if(idInicio == "free5"){
+  //      //Primer free
+  //      yearFree.push(auxNum)
+  //  }else if(idInicio != "free5" && auxNum < yearFree[0]){
+  //      //Izquierda
+  //      if(year > yearPuesto){
+  //       alert ("Fallaste en la posición!");
+  //        }
+//
+  //  }else if(idInicio != "free5" && auxNum > yearFree[0]){
+  //      //derecha
+  //      if(year < yearPuesto){
+//
+  //      alert ("Fallaste en la posición!");
+  //      }
+  //  }
+   
+
+    if (parseInt(auxNum) % 2 != 0 && idInicio != "free5") {
     auxNumMas = parseInt(auxNum)+1
     auxNumMenos = parseInt(auxNum)-1
     var x = document.getElementById(auxFree+auxNumMas);
@@ -656,10 +687,45 @@ UI.prototype.mostrarArticulo=function(id) {
       } else {
         y.style.display = "none";
       }
+}else if(idInicio == "free5"){
+    auxFree = idInicio.slice(0, 4)
+    auxNum = idInicio.slice(4, 5)
+    auxNumMas = parseInt(auxNum)+2
+    auxNumMenos = parseInt(auxNum)-2
+    var x = document.getElementById(auxFree+auxNumMas);
+    var y = document.getElementById(auxFree+auxNumMenos);
+   // var y = document.getElementById(id);
+    if (x.style.display == "none") {
+      x.style.display = "inline";
+    } else {
+      x.style.display = "none";
+    }
+    if (y.style.display == "none") {
+        y.style.display = "inline";
+      } else {
+        y.style.display = "none";
+      }
+}else if(parseInt(auxNum) % 2 == 0 ){
+    auxNumMas = parseInt(auxNum)+1
+    auxNumMenos = parseInt(auxNum)-1
+    var x = document.getElementById(auxFree+auxNumMas);
+    var y = document.getElementById(auxFree+auxNumMenos);
+   // var y = document.getElementById(id);
+    if (x.style.display === "none") {
+      x.style.display = "inline";
+    } else {
+      x.style.display = "none";
+    }
+    if (y.style.display === "none") {
+        y.style.display = "inline";
+      } else {
+        y.style.display = "none";
+      }
+}
   }
 
 /*
- * Clear all drag items
+ * Vacia todos los items drag
  */
 UI.prototype.clear_drag = function() {
     var this_ui;
@@ -670,29 +736,27 @@ UI.prototype.clear_drag = function() {
 
         for (i = 0; i < this_ui.drag.length; i++) {
             item = this_ui.drag[i];
-            // remove hover classes
+            // Quita las clases hover
             item.unbind('mouseenter').unbind('mouseleave');
-            // force removal of highlight of cards that are dropped on the
-            // suit cells
+            // Quita el highlight de las cartas
             $(this).removeClass('highlight');
-            // remove double-click handler
+            // Quita los double click
             item.unbind('dblclick');
             item.draggable('destroy');
         }
-        // empty the draggable array
+        // Vacia array de draggeables
         this_ui.drag.length = 0;
 
-        // empty the droppable array - this makes sure that drop array is
-        // cleared after an invalid drop
+        // Vacia el array de droppeables asegurandose de que el array se vacía después de un drop valido
         this_ui.clear_drop();
 
-        // create new draggables
+        // crea nuevos dragables
         this_ui.create_draggables();
     };
 };
 
 /**
- * Clear all droppables
+ * Vacía los dropables
  */
 UI.prototype.clear_drop = function() {
     var i, item;
@@ -702,7 +766,7 @@ UI.prototype.clear_drop = function() {
         item.droppable('destroy');
         //item.droppable('disable');
     }
-    // empty the droppably array
+    // Vacia el array de dropables
     this.drop.length = 0;
 };
 
@@ -715,7 +779,7 @@ UI.prototype.is_won = function() {
 };
 
 /**
- * Animate the cards at the end of a won game
+ * Anima las cartas al ganar un juego
  */
 UI.prototype.win_animation = function() {
     var i, $card_div, this_ui, v_x;
@@ -725,9 +789,8 @@ UI.prototype.win_animation = function() {
         this_ui = this;
         v_x = 3 + 3*Math.random();
 
-        // this is necessary for IE because you can't pass parameters to
-        // function in setTimeout. So need to create a closure to bind
-        // the variables.
+        // Esto es necesario por el IE ya que no podemos pasar parametros a una función en setTimeout.
+
         function animator($card_div, v_x, this_ui) {
             setTimeout(function() {
                 this_ui.card_animation($card_div, v_x, 0, this_ui);
@@ -738,7 +801,7 @@ UI.prototype.win_animation = function() {
 };
 
 /**
- * Animation of a single card
+ * Animación de carta individual
  */
 UI.prototype.card_animation = function($card_div, v_x, v_y, this_ui) {
     var pos, top, left, bottom;
@@ -747,11 +810,11 @@ UI.prototype.card_animation = function($card_div, v_x, v_y, this_ui) {
     top = pos.top;
     left = pos.left;
 
-    // calculate new vertical velocity v_y
-    bottom = $(window).height() - 96; // 96 is height of card div
+    // calcular nueva velocidad vertical v_y
+    bottom = $(window).height() - 96; // 96 es el alto del div carta
     v_y += 0.5; // acceleration
     if (top + v_y + 3 > bottom) {
-        // bounce card at bottom, and add friction
+        // añade fricción y rebota la carta
         v_y = -0.75*v_y; // friction = 0.75
     }
 
@@ -759,7 +822,7 @@ UI.prototype.card_animation = function($card_div, v_x, v_y, this_ui) {
     top += v_y;
     $card_div.offset({top: top, left: left});
     if (left > -80) {
-        // only continue animation if card is still visible
+        // Solo continua animación se la carta es visible dentro del tablero
         setTimeout(function() {
             var cd = $card_div;
             this_ui.card_animation(cd, v_x, v_y, this_ui);
@@ -798,13 +861,13 @@ UI.prototype.add_cards_car = function(drag_id, drop_id){
  for (i = 0; i < year.length; i++) {
 
     if(year[i] == drop_id){
-        x.src =  'images/' + drag_id + '.png';
+        x.src =  'images/' + drag_id + 'b.png';
     }
 }
 }
 
 /**
- * The help dialog
+ * Dialogo de ayuda
  */
 UI.prototype.help = function() {
     $('#helptext').dialog({
