@@ -22,11 +22,12 @@ EDIT ON
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 .container-envelope {
-  padding: 35px 15px;
+  margin: auto;
+  width: 50%;
+  border: 3px;
+  padding: 10px;
+  width: 300px;
   color: #fff;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
 }
 .col-xs-12 {
@@ -159,11 +160,22 @@ h1 {
 <aside class="responsive-banner">
 	<span class="circle-a"></span>
 	<span class="circle-b"></span>
-	<img src="image.png" />
 	<div class="container-envelope">
-		<p>Live Sites using our WordPress Themes</p>
-		<a target="_blank" href="https://www.silocreativo.com/en/showcase/" class="more-link">Get inspired</a>
+		<p>Introduzca su Nombre</p>
+    
 	</div>
+  <br>
+  <form method="post" action="juego.php">
+<center>  <input type="text" name="nombre"></center>
+
+<?php
+$name = $_POST['nombre']; 
+?>
+<br>
+ <center> <input type="submit"></center>
+
+
+ </form>
 </aside>
 
 

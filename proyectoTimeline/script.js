@@ -4,7 +4,9 @@
  var yearPuesto=new Array; 
  var yearIndex=new Array; 
  var yearFree=new Array; 
- var cont = 0
+ var cont = 0;
+ var contW = 0;
+ var fallo = false;
 
  var Game = function() {
     // the empty slots for moving cards
@@ -233,14 +235,20 @@ Game.prototype.push_card = function(card, drop_id) {
  */
 Game.prototype.is_game_won = function() {
     var i,j, card;
-
-    for (i = 0; i < 4; i++) {
-            card = this.free;
-        if (card[i] == null) {
-            return false;
-        }
+    
+        for (i = 0; i < 4; i++) {
+            card = this.columns;
+        if (card[i[0]] == null) {
+            contW++
+            break;
+        }       
     }
-    return true;
+    if (contW == 4 && fallo == false){
+        return true;
+    }
+    
+   
+    return false;
 };
 
 /******************************************************************************/
@@ -333,7 +341,6 @@ var UI = function(game) {
     // an array of all the droppables
     this.drop = [];
 
-    this.yearPuesto = [];
 
 };
 
@@ -377,7 +384,6 @@ UI.prototype.add_cards = function() {
             card = cards[j];
             img = new Image();
             img.src = card.image();
-
             card_div = document.createElement('div');
             card_div.className = 'card';
             card_div.id = card.id;
@@ -497,7 +503,7 @@ UI.prototype.dblclick_move = function(card_id, drop_id, this_ui) {
                         // tell the game the card has moved
                         this_ui.game.move_card(card_id, drop_id);
                         this_ui.clear_drag()();
-                        this_ui.is_won();
+                 //       this_ui.is_won();
 
     });
 };
@@ -578,6 +584,7 @@ UI.prototype.create_droppables = function() {
                     }
 
                     // Se ha completado el juego?
+                    
                     this_ui.is_won();
 
                     // reset ui para parar los dropeables
@@ -594,13 +601,11 @@ UI.prototype.create_droppables = function() {
 /*Enseña articulo basado en el año */
 
 UI.prototype.filtrarFallo=function(year,idInicio) {
-    yearPuesto.push(year)
-
     // Necesitamos sacar los frees que vamos poniendo, para comparar si es derecha o izquierda la posición de la carta actual, si la actual es mayor eso es que está a la derecha
     // Poner un if que filtre por idInicio comparando como string si es un freeNormal o Aux
     auxFree = idInicio.slice(0, 4)
     auxNum = idInicio.slice(4, 5)
-// Necesito un crear un array de años para filtrar por free y sacar el indice de todos huecos con carta y filtrar por ellos
+// Necesito crear un array de años para filtrar por free y sacar el indice de todos huecos con carta y filtrar por ellos
 // Tanto el indice de la posición en un free de la carta como el año de la carta, deben ser mayores si están a la izquierda de todas las cartas puestas
 // meto enel 5(1945), luego en el 3(1936), y en el 4(1956)
 //Representación: Al meter el 4º
@@ -608,29 +613,37 @@ UI.prototype.filtrarFallo=function(year,idInicio) {
 //   Revisa el 1º               Revisa el 2º                  Salta fallo,
 // Es menor el año? si? -       Es menor el año? no?          Está a la derecha de un añor mayor que el.
 // -> está a la derecha? ok     Está a la izquierda? X
-    if(idInicio == "free5"){
-        //Primer free
-    yearFree.push(auxNum)
-      //  yearFreep = 
-    }else if(idInicio != "free5" && auxNum < yearFree.reverse()[0]){
-        //Izquierda
-        if(year > yearPuesto){
-         alert ("Fallaste en la posición!");
-         document.getElementById("newgame").click();         
-         }
-
-    }else if(idInicio != "free5" && auxNum > yearFree[0]){
-        //derecha
-        if(year < yearPuesto){
-
-        alert ("Fallaste en la posición!");
-        document.getElementById("newgame").click();         
+    for (let i = 0; i < yearFree.length; i++) {
+        if(idInicio == "free5"){
+            //Primer free
+        yearFree.push(auxNum)
+        break;
+          //  yearFreep = 
+        }else if(idInicio != "free5" && auxNum < yearFree[i]&& year > yearPuesto[i]){
+            //Izquierda
+     
+                    alert ("Fallaste en la posición!");
+                    fallo=true
+                    document.getElementById("newgame").click();    
+                    break;    
+     
+        }           
+        else if(idInicio != "free5" && auxNum > yearFree[i] && year < yearPuesto[i]){
+            //derecha 
+                    alert ("Fallaste en la posición!");
+                    fallo=true
+                    document.getElementById("newgame").click();  
+                    break;
+            }
+        
+        }     
+        yearPuesto.push(year)
+        yearFree.push(auxNum)
+        cont++;   
+      
     }
-    }
-    yearFree.push(auxNum)
-
-    cont++;
-  }
+   
+  
 
 UI.prototype.mostrarArticulo=function(id) {
     var x = document.getElementsByClassName(id);
@@ -645,7 +658,6 @@ UI.prototype.mostrarArticulo=function(id) {
   UI.prototype.mostrarFree=function(idInicio, year) {
     
     years = ["1492","1789","1914","1936","1939","1945","1969","1989","1990","2001"];
-    yearPuesto.push(year)
 
     // Necesitamos sacar los frees que vamos poniendo, para comparar si es derecha o izquierda la posición de la carta actual, si la actual es mayor eso es que está a la derecha
     // Poner un if que filtre por idInicio comparando como string si es un freeNormal o Aux
@@ -672,8 +684,12 @@ UI.prototype.mostrarArticulo=function(id) {
    
 
     if (parseInt(auxNum) % 2 != 0 && idInicio != "free5") {
-    auxNumMas = parseInt(auxNum)+1
-    auxNumMenos = parseInt(auxNum)-1
+    if(idInicio != "free9"){
+        auxNumMas = parseInt(auxNum)+1
+    }
+    if(idInicio != "free0"){
+            auxNumMenos = parseInt(auxNum)-1
+        }
     var x = document.getElementById(auxFree+auxNumMas);
     var y = document.getElementById(auxFree+auxNumMenos);
    // var y = document.getElementById(id);

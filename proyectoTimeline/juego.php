@@ -8,7 +8,16 @@
     function iniciarMano(){
         global $Mano;
     }
+
+    // $Nombre=$_POST['nombre'];
+    // echo '<div id="divNombre">
+    // <p id="Nombre">Sesión abierta de "'.$Nombre.'"
+    // </div>';
+    
+
+    //echo var_export($_POST);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
