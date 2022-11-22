@@ -47,6 +47,7 @@ Game.prototype.reset = function() {
         col = this.columns[i];
         col.length = 0;
     }
+    window.location.reload();
 
     this.init();
 };
@@ -881,6 +882,17 @@ UI.prototype.add_cards_car = function(drag_id, drop_id){
     }
 }
 }
+
+UI.prototype.reset_cards_car = function(drag_id, drop_id){
+    var img 
+    year = ["1492","1789","1914","1936","1939","1945","1969","1989","1990","2001"]
+    img = new Image();
+ //   document.write(card_id)
+ //celda se cambiará por drag_id, que será el id de la carta, este id será una fecha
+ var x = document.getElementById("celda"+drop_id);
+    x.setAttribute('display','none')
+}
+
 
 /**
  * Dialogo de ayuda

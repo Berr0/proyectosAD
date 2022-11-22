@@ -1,21 +1,12 @@
 <?php
-    //Se crea el mazo como un array de numeros, que representan las cartas, ya que cada carta se llama como un número
-    $Mazo = array (1,2,3,4,5,6,8,9,10,11,12,13,14,15);
-    $Mano = array ();
-    $Mano[] = 3;
-    iniciarMano();
 
-    function iniciarMano(){
-        global $Mano;
-    }
+     $Nombre=$_POST['nombre'];
+     echo '<div id="divNombre">
+     <br>
+     <p class="small rise" id="Nombre">Sesión abierta de "'.$Nombre.'"
+     </div>';
 
-    // $Nombre=$_POST['nombre'];
-    // echo '<div id="divNombre">
-    // <p id="Nombre">Sesión abierta de "'.$Nombre.'"
-    // </div>';
-    
 
-    //echo var_export($_POST);
 ?>
 
 <!DOCTYPE html>
@@ -27,12 +18,14 @@
     <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js" type="text/javascript"></script>
+    
     <title>Timeline</title>
 </head>
 <body id="Interface">
 <div id="title">
-    <h1>Timeline</h1>
-    <h2>
+
+<center><p class="large rise">Timeline</p></center>
+<h2>
         <button id="newgame">New Game</button>
         <button id="help">Help</button>
     </h2>
