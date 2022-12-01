@@ -23,11 +23,7 @@
 		<p></p>
 	</div>
   <br>
- 
-
-
-
- </form>
+  </form>
 </section>
 <body>
 <aside class="responsive-banner">

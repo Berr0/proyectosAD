@@ -1,6 +1,5 @@
-/**
- * Encapsulamos la partida
- */
+// Variables que utilizamos al recargar la página
+
  var yearPuesto=new Array; 
  var yearIndex=new Array; 
  var yearFree=new Array; 
@@ -8,14 +7,18 @@
  var contW = 0;
  var fallo = false;
 
+ /**
+ * Encapsulamos la partida
+ */
+
  var Game = function() {
-    // the empty slots for moving cards
+    // los huecos vacios para poner las cartas
     this.free = [null, null, null, null, null, null, null, null,null,null]
-    // the columns of cards
+    // las columnas de los free
     this.columns = [[], [], [], []];
-    // the years in game
+    // Los años en el juego
     this.year = ["1492","1789","1914","1936","1939","1945","1969","1989","1990","2001"]
-    // the deck of cards
+    // la baraja de cartas
     this.deck = new this.Deck();
 };
 
@@ -60,14 +63,14 @@ Game.prototype.valid_drag_ids = function() {
 
     drag_ids = [];
 
-    // add cards in freecell spaces
+    // Añade cartas en los freecell 
     for (i = 0; i < this.year.length; i++) {
         card = this.free[i];
         if (card !== null) {
             drag_ids.push(card.id.toString());
         }
     }
-    // add cards at the bottom of columns
+    // añade cartas a las columas
     for (i = 0; i < 4; i++) {
         col = this.columns[i];
         col_len = col.length;
@@ -83,7 +86,7 @@ Game.prototype.valid_drag_ids = function() {
 //Aqui tenemos los id de los huecos y las cartas
 
 /**
- * the id attribute string in the DOM.
+ * el id attribute string en el DOM.
  * Crear un array de ids de los drops de la carta, 
  */
 Game.prototype.valid_drop_ids = function(card_id) {
@@ -390,7 +393,6 @@ UI.prototype.add_cards = function() {
             card_div.id = card.id;
             card_div.style.top = (25 * j).toString() + 'px';
             card_div.appendChild(img);
-
             col_div.appendChild(card_div);
         }
     }
@@ -501,7 +503,6 @@ UI.prototype.dblclick_move = function(card_id, drop_id, this_ui) {
     card.animate({top: '+=' + top_move, left: '+=' + left_move},
                   250,
                   function() {
-                        // tell the game the card has moved
                         this_ui.game.move_card(card_id, drop_id);
                         this_ui.clear_drag()();
                  //       this_ui.is_won();
@@ -855,7 +856,7 @@ UI.prototype.setup_secret = function() {
 };
 
 /**
- * Show the win dialog box
+ * enseña la win dialog 
  */
 UI.prototype.win = function() {
     $('#windialog').dialog({
