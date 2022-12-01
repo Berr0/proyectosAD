@@ -327,7 +327,7 @@ Game.prototype.Deck.prototype.Card = function(id,year) {
 };
 
 /**
- * The image name and location as a string. Used when creating the web page.
+ * El nombre de la imagen y su posición como string. Usado al crear la página.
  */
 Game.prototype.Deck.prototype.Card.prototype.image = function() {
     return 'images/' + this.year.toString() + '.png';
