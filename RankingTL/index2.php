@@ -18,32 +18,34 @@
             $db = conectarDB();
             //Export $_POST 
             $nom = $_POST['nombreMazo'];
-            $hort = getMazoFromNombre($db, $nom);
-            echo "\n" . "El mazo es: " . $hort[0][0]["NOMBRE"];
+            $mazo = getMazoFromNombre($db, $nom);
+            echo "\n" . "El mazo es: " . $mazo[0][0]["NOMBRE"];
             break;
-        case 'Añadir':
+        case 'Anadir':
             require_once("dbutils.php");
             $db = conectarDB();
             //Export $_POST 
             $nom = $_POST['nombreMazo'];
-            $hort = getMazoFromNombre($db, $nom);
-            echo "\n" . "El mazo es: " . $hort[0][0]["NOMBRE"];
+            $tag = substr($nom, 0, 3);
+            $hort = addMazoByNombre($db, $nom, $tag);
+            echo "\n" . "El añadir es: " . $hort[0][0]["NOMBRE"].",". $tag;
             break;
         case 'Borrar':
             require_once("dbutils.php");
             $db = conectarDB();
             //Export $_POST 
             $nom = $_POST['nombreMazo'];
-            $hort = getMazoFromNombre($db, $nom);
-            echo "\n" . "El mazo es: " . $hort[0][0]["NOMBRE"];
+            $maz = BorrarMazoFromNombre($db, $nom);
+            echo "\n" . "El Borrar es: " .$nom;
             break;
         case 'Modificar':
             require_once("dbutils.php");
             $db = conectarDB();
             //Export $_POST 
             $nom = $_POST['nombreMazo'];
-            $hort = getMazoFromNombre($db, $nom);
-            echo "\n" . "El mazo es: " . $hort[0][0]["NOMBRE"];
+            $tag = $_POST['tagMod'];
+            $hort = ModificarMazoFromNombre($db, $nom,$tag);
+            echo "\n" . "El Modificar es: " . $tag;
             break;
     }
 ?>

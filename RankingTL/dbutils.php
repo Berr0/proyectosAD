@@ -30,26 +30,65 @@ function getMazoFromNombre($conDb, $nom)
 
 function addMazoByNombre($conDB, $nom, $tag)
 {
-    $vectorTotal = array();
-    try {
-        $sql = "INSERT INTO MAZOS (NOMBRE,TAG) VALUES (:NOM,:TAG)";
-        $stmt = $conDB->query($sql);
-        $stmt -> execute(array(":NOM"=>$nom,":TAG"=>$tag));
-        while ($fila = $conDB->fetch($sql)) {
-                $vectorTotal[] = $fila;
-        }
-        if ($conDB->query($sql) === TRUE) {
-          echo "New record created successfully";
-        } else {
-          echo "Error: " . $sql . "<br>" . $conDB->error;
-        }
-    } catch (PDOException $ex) {
-        echo ("Error al conectar con la base de datos" . $ex->getMessage());
+    try
+    {
+      $sql = "INSERT INTO MAZOS(NOMBRE,TAG) VALUES (:NOMBRE,:TAG)";
+      $stmt = $conDB->prepare($sql);
+      $stmt->bindParam(':NOMBRE', $nom);
+      $stmt->bindParam(':TAG', $tag);
+      $stmt->execute();
+     }
+    catch (PDOException $ex)
+    {
+      echo ("Error en insertarHortaliza".$ex->getMessage());
     }
-    
-    echo $vectorTotal;
-    return $vectorTotal;
-}
+    return $conDB->lastInsertId();
+  }
+
+
+function BorrarMazoFromNombre($conDB, $nom)
+{
+    //Bien
+    $vectorTotal = array();
+    try
+    {
+      $sql = "DELETE FROM MAZOS WHERE NOMBRE=:NOM";
+      $stmt = $conDB->prepare($sql);
+      $stmt->bindParam(':NOM', $nom);
+      $stmt->execute();
+      $result = $stmt->rowCount();
+     }
+    catch (PDOException $ex)
+    {
+      echo ("Error en borrarHortaliza".$ex->getMessage());
+    }
+    return $result;
+  }
+
+  function ModificarMazoFromNombre($conDB, $nom, $tag)
+  {
+    $result =0;
+    try
+    {
+        //sql update where tag is updated in mazos table
+
+        
+      $sql = "UPDATE MAZOS SET TAG=:tag WHERE NOMBRE=:nom";
+      $stmt = $conDB->prepare($sql);
+      $stmt->bindParam(':nom', $nom,PDO::PARAM_STR);
+      $stmt->bindParam(':tag', $tag,PDO::PARAM_STR);
+      $stmt->execute();
+      $result = $stmt->rowCount();
+     }
+    catch (PDOException $ex)
+    {
+      echo ("Error en ModificarMazoFromNombre".$ex->getMessage());
+    }
+    return $result;
+  }
+  
+  
+  
 
 function getAllHortalizasFromTamAndColor($conDB, $tam,$color,$bool){
     $vectorTotal = array();

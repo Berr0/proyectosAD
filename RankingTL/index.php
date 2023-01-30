@@ -16,13 +16,13 @@ var_export($db);
 <body>
     <h1>Admin RankingTL Dashboard</h1>
     <h2>Welcome to Admin RankingTL Dashboard</h2>
-    <div>
+    <div id="div1">
     <?php
     
     ?>
     <select name="opcionSeleccionada" id="select1">
         <option value="Seleccionar">Seleccionar mazo</option>
-        <option value="Añadir">Añadir mazo</option>
+        <option value="Anadir">Añadir mazo</option>
         <option value="Borrar">Borrar mazo</option>
         <option value="Modificar">Modificar mazo</option>
     </select>
@@ -30,15 +30,22 @@ var_export($db);
     <br>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function(event) {
-            document.getElementById("select1").addEventListener("change", function(event) {
-                //create <p> with value of <select>
-                var select = document.getElementById("select1");
-                var option = document.createElement("option");
-                option.text = select.value;
-                select.parentNode.insertBefore(option, select.nextSibling);
-            }); 
-            });
+        //When option modificar is selected an input text is placed 
+        document.getElementById('select1').onchange = function() {
+            if (document.getElementById('select1').value == 'Modificar') {
+                document.querySelector('div').innerHTML += '<br><br><input type="text" name="tagMod" id="txtmod" placeholder="Un tag de mazo a modificar">'
+
+            }
+        };
+        // document.addEventListener("DOMContentLoaded", function(event) {
+        //     document.getElementById("select1").addEventListener("change", function(event) {
+        //         //create <p> with value of <select>
+        //         var select = document.getElementById("select1");
+        //         var option = document.createElement("option");
+        //         option.text = select.value;
+        //         select.parentNode.insertBefore(option, select.nextSibling);
+        //     }); 
+        //     });
     </script>
     
 
