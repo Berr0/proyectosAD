@@ -1,7 +1,7 @@
 <?php
     function conectarDB(){
         try{
-            $db = new PDO("mysql:host=localhost;dbname=DB_FRUITIS;charset=utf8mb4","root","");
+            $db = new PDO("mysql:host=localhost;dbname=DB_RANKING;charset=utf8mb4","root","");
             $db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
             return $db;
         }
@@ -28,20 +28,25 @@ function getMazoFromNombre($conDb, $nom)
 }
 
 
-function getAllHortalizasFromTam($conDB, $tam)
+function addMazoByNombre($conDB, $nom, $tag)
 {
     $vectorTotal = array();
     try {
-
-        $sql = "SELECT * FROM HORTALIZAS WHERE TAM = $tam";
+        $sql = "INSERT INTO MAZOS (NOMBRE,TAG) VALUES (:NOM,:TAG)";
         $stmt = $conDB->query($sql);
+        $stmt -> execute(array(":NOM"=>$nom,":TAG"=>$tag));
         while ($fila = $conDB->fetch($sql)) {
                 $vectorTotal[] = $fila;
         }
-
+        if ($conDB->query($sql) === TRUE) {
+          echo "New record created successfully";
+        } else {
+          echo "Error: " . $sql . "<br>" . $conDB->error;
+        }
     } catch (PDOException $ex) {
         echo ("Error al conectar con la base de datos" . $ex->getMessage());
     }
+    
     echo $vectorTotal;
     return $vectorTotal;
 }
