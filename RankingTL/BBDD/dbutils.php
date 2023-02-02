@@ -27,15 +27,33 @@ function getMazoFromNombre($conDb, $nom)
     return $vectorTotal;
 }
 
+function getAllMazos($conDb)
+{
+    //Bien
+    $vectorTotal = array();
+    try {
+        $sql = "SELECT * FROM MAZOS";
+        $stmt = $conDb->prepare($sql,array(PDO::ATTR_CURSOR=>PDO::CURSOR_FWDONLY));
+        $stmt -> execute(array());
+        while ($fila = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
+            $vectorTotal[] = $fila;
+        }
+        } catch (PDOException $ex) {
+        echo ("Error al conectar con la base de datos".$ex->getMessage());
+    }
+    return $vectorTotal;
+}
 
-function addMazoByNombre($conDB, $nom, $tag)
+
+function addMazoByNombre($conDB, $nom, $tag, $desc)
 {
     try
     {
-      $sql = "INSERT INTO MAZOS(NOMBRE,TAG) VALUES (:NOMBRE,:TAG)";
+      $sql = "INSERT INTO MAZOS(NOMBRE,TAG,DESCRIPCION) VALUES (:NOMBRE,:TAG,:DESCR)";
       $stmt = $conDB->prepare($sql);
       $stmt->bindParam(':NOMBRE', $nom);
       $stmt->bindParam(':TAG', $tag);
+      $stmt->bindParam(':DESCR', $desc);
       $stmt->execute();
      }
     catch (PDOException $ex)
@@ -89,7 +107,7 @@ function BorrarMazoFromNombre($conDB, $nom)
   
   
   
-
+/*
 function getAllHortalizasFromTamAndColor($conDB, $tam,$color,$bool){
     $vectorTotal = array();
     try {
@@ -120,4 +138,49 @@ catch (PDOException $ex) {
     }
     return $vectorTotal;
 }
+*/
+
+
+//FUNCIONES DE CARTA
+
+function getCartaFromFecha($conDb, $fech)
+{
+    //Bien
+    $vectorTotal = array();
+    try {
+        $sql = "SELECT * FROM CARTAS WHERE FECHA = :FEC";
+        $stmt = $conDb->prepare($sql,array(PDO::ATTR_CURSOR=>PDO::CURSOR_FWDONLY));
+        $stmt -> execute(array(":FEC"=>$fech));
+        while ($fila = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
+            $vectorTotal[] = $fila;
+        }
+        } catch (PDOException $ex) {
+        echo ("Error al conectar con la base de datos".$ex->getMessage());
+    }
+    return $vectorTotal;
+}
+
+/*
+Falta cambiar en la BBDD la descripcion de las cartas para que permitan ser null al crearse
+Tenemos que buscar como meter imagenes en la base de datos correctamente, de momento tengo esto,
+pero no está comprobado
+
+Faltan las funciones de creacion y modificación de cartas
+
+*/ 
+
+function addImageToCarta($conDb, $fech, $image)
+{
+    try {
+        $sql = "INSERT INTO CARTAS (FECHA, IMAGEN) VALUES (:FECHA, :IMAGEN)";
+        $stmt = $conDb->prepare($sql);
+        $stmt->bindParam(':FECHA', $fech, PDO::PARAM_STR);
+        $stmt->bindParam(':IMAGEN', $image, PDO::PARAM_STR);
+        $stmt->execute();
+        } catch (PDOException $ex) {
+            echo ("Error al insertar carta en la base de datos". $ex->getMessage());
+        }
+        return $stmt->rowCount();
+    }
+
 ?>

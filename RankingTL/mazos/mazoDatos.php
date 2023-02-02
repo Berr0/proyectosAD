@@ -14,7 +14,7 @@
     //if the $_POST['opcionSeleccionada'] is Seleccionar
     switch ($_POST['opcionSeleccionada']) {
         case 'Seleccionar':
-            require_once("dbutils.php");
+            require_once("../BBDD/dbutils.php");
             $db = conectarDB();
             //Export $_POST 
             $nom = $_POST['nombreMazo'];
@@ -22,16 +22,17 @@
             echo "\n" . "El mazo es: " . $mazo[0][0]["NOMBRE"];
             break;
         case 'Anadir':
-            require_once("dbutils.php");
+            require_once("../BBDD/dbutils.php");
             $db = conectarDB();
             //Export $_POST 
             $nom = $_POST['nombreMazo'];
             $tag = substr($nom, 0, 3);
-            $hort = addMazoByNombre($db, $nom, $tag);
+            $desc = $_POST['desc'];
+            $hort = addMazoByNombre($db, $nom, $tag, $desc);
             echo "\n" . "El añadir es: " . $hort[0][0]["NOMBRE"].",". $tag;
             break;
         case 'Borrar':
-            require_once("dbutils.php");
+            require_once("../BBDD/dbutils.php");
             $db = conectarDB();
             //Export $_POST 
             $nom = $_POST['nombreMazo'];
@@ -39,7 +40,7 @@
             echo "\n" . "El Borrar es: " .$nom;
             break;
         case 'Modificar':
-            require_once("dbutils.php");
+            require_once("../BBDD/dbutils.php");
             $db = conectarDB();
             //Export $_POST 
             $nom = $_POST['nombreMazo'];
