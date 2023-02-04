@@ -90,7 +90,6 @@ function BorrarMazoFromNombre($conDB, $nom)
     {
         //sql update where tag is updated in mazos table
 
-        
       $sql = "UPDATE MAZOS SET TAG=:tag WHERE NOMBRE=:nom";
       $stmt = $conDB->prepare($sql);
       $stmt->bindParam(':nom', $nom,PDO::PARAM_STR);
@@ -160,14 +159,7 @@ function getCartaFromFecha($conDb, $fech)
     return $vectorTotal;
 }
 
-/*
-Falta cambiar en la BBDD la descripcion de las cartas para que permitan ser null al crearse
-Tenemos que buscar como meter imagenes en la base de datos correctamente, de momento tengo esto,
-pero no está comprobado
 
-Faltan las funciones de creacion y modificación de cartas
-
-*/ 
 
 function addImageToCarta($conDb, $fech, $image)
 {
@@ -182,5 +174,78 @@ function addImageToCarta($conDb, $fech, $image)
         }
         return $stmt->rowCount();
     }
+
+     //DELETE FROM CARTAS WHERE `CARTAS`.`ID` = 2
+
+
+function BorrarCartaFromFecha($conDB, $fec)
+{
+    //Bien
+    $vectorTotal = array();
+    try
+    {
+      $sql = "DELETE FROM CARTAS WHERE FECHA=:FEC";
+      $stmt = $conDB->prepare($sql);
+      $stmt->bindParam(':FEC', $fec);
+      $stmt->execute();
+      $result = $stmt->rowCount();
+     }
+    catch (PDOException $ex)
+    {
+      echo ("Error en borrar Carta".$ex->getMessage());
+    }
+    return $result;
+  }
+
+
+function addCartaByFechaAndDesc($conDB, $nom, $tag, $desc)
+{
+    try
+    {
+        
+      $sql = "INSERT INTO MAZOS(NOMBRE,TAG,DESCRIPCION) VALUES (:NOMBRE,:TAG,:DESCR)";
+      $stmt = $conDB->prepare($sql);
+      $stmt->bindParam(':NOMBRE', $nom);
+      $stmt->bindParam(':TAG', $tag);
+      $stmt->bindParam(':DESCR', $desc);
+      $stmt->execute();
+     }
+    catch (PDOException $ex)
+    {
+      echo ("Error en insertarHortaliza".$ex->getMessage());
+    }
+    return $conDB->lastInsertId();
+  }
+
+  function ModificarCartaFromFecha($conDB, $nom, $fec, $newfec, $desc)
+  {
+    $result =0;
+    try
+    {
+        //sql update where tag is updated in mazos table
+
+        // UPDATE `CARTAS` SET `FECHA` = '2491' WHERE `CARTAS`.`ID` = 1 
+        
+      $sql = "UPDATE `CARTAS` SET DESCRIPCION` = $desc, FECHA=:newfec WHERE FECHA=:fec";
+      $stmt = $conDB->prepare($sql);
+      $stmt->bindParam(':nom', $nom,PDO::PARAM_STR);
+      $stmt->bindParam(':fec', $fec,PDO::PARAM_STR);
+      $stmt->bindParam(':newfec', $newfec,PDO::PARAM_STR);
+      $stmt->bindParam(':desc', $desc,PDO::PARAM_STR);
+      $stmt->execute();
+      $result = $stmt->rowCount();
+     }
+    catch (PDOException $ex)
+    {
+      echo ("Error en ModificarMazoFromNombre".$ex->getMessage());
+    }
+    return $result;
+  }
+
+  /*
+Falta cambiar en la BBDD la descripcion de las cartas para que permitan ser null al crearse
+Tenemos que buscar como meter imagenes en la base de datos correctamente, de momento tengo esto,
+pero no está comprobado
+*/ 
 
 ?>
