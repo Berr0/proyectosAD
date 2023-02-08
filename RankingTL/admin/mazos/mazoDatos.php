@@ -39,7 +39,7 @@
             $db = conectarDB();
             //Export $_POST 
             $nom = $_POST['nombreMazo'];
-            $maz = BorrarMazoFromNombre($db, $nom);
+            $maz = borrarMazoFromNombre($db, $nom);
             echo "\n" . "El Borrar es: " .$nom;
             break;
         case 'Modificar':
@@ -48,7 +48,7 @@
             //Export $_POST 
             $nom = $_POST['nombreMazo'];
             $tag = $_POST['tagMod'];
-            $hort = ModificarMazoFromNombre($db, $nom,$tag);
+            $hort = modificarMazoFromNombre($db, $nom,$tag);
             echo "\n" . "El Modificar es: " . $tag;
             break;
     }

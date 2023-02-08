@@ -10,6 +10,23 @@
         }
     }
 
+    function getAllJugadores($conDb)
+{
+    //Bien
+    $vectorTotal = array();
+    try {
+        $sql = "SELECT * FROM JUGADORES ORDER BY PUNTOS DESC LIMIT 0,10 ";
+        $stmt = $conDb->prepare($sql,array(PDO::ATTR_CURSOR=>PDO::CURSOR_FWDONLY));
+        $stmt -> execute(array());
+        while ($fila = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
+            $vectorTotal[] = $fila;
+        }
+        } catch (PDOException $ex) {
+        echo ("Error al conectar con la base de datos".$ex->getMessage());
+    }
+    return $vectorTotal;
+}
+
 function getMazoFromNombre($conDb, $nom)
 {
     //Bien
@@ -63,8 +80,47 @@ function addMazoByNombre($conDB, $nom, $tag, $desc)
     return $conDB->lastInsertId();
   }
 
+  //
 
-function BorrarMazoFromNombre($conDB, $nom)
+  function addJugadorByPuntos($conDB, $punt)
+{
+    try
+    {
+      $sql = "INSERT INTO `JUGADORES` (`PUNTOS`) VALUES (:PUNT);";
+      $stmt = $conDB->prepare($sql);
+      $stmt->bindParam(':PUNT', $punt);
+      $stmt->execute();
+     }
+    catch (PDOException $ex)
+    {
+      echo ("Error en insertar".$ex->getMessage());
+    }
+    return $conDB->lastInsertId();
+  }
+
+  //UPDATE `JUGADORES` SET `NOMBRE` = 'x' WHERE `JUGADORES`.`ID` = 17 
+
+  function modificarJugadorFromNombre($conDB, $nom,$punt)
+  {
+    $result =0;
+    try
+    {
+        //sql update where tag is updated in mazos table
+      $sql = "UPDATE JUGADORES SET NOMBRE=:nom WHERE PUNTOS=:punt";
+      $stmt = $conDB->prepare($sql);
+      $stmt->bindParam(':nom', $nom,PDO::PARAM_STR);
+      $stmt->bindParam(':punt', $punt,PDO::PARAM_STR);
+      $stmt->execute();
+      $result = $stmt->rowCount();
+     }
+    catch (PDOException $ex)
+    {
+      echo ("Error en ModificarMazoFromNombre".$ex->getMessage());
+    }
+    return $result;
+  }
+
+function borrarMazoFromNombre($conDB, $nom)
 {
     //Bien
     $vectorTotal = array();
@@ -83,7 +139,26 @@ function BorrarMazoFromNombre($conDB, $nom)
     return $result;
   }
 
-  function ModificarMazoFromNombre($conDB, $nom, $tag)
+  function borrarJugadorFromPuntuacion($conDB, $nom)
+{
+    //Bien
+    $vectorTotal = array();
+    try
+    {
+      $sql = "DELETE FROM MAZOS WHERE NOMBRE=:NOM";
+      $stmt = $conDB->prepare($sql);
+      $stmt->bindParam(':NOM', $nom);
+      $stmt->execute();
+      $result = $stmt->rowCount();
+     }
+    catch (PDOException $ex)
+    {
+      echo ("Error en borrarHortaliza".$ex->getMessage());
+    }
+    return $result;
+  }
+
+  function modificarMazoFromNombre($conDB, $nom, $tag)
   {
     $result =0;
     try
@@ -178,7 +253,7 @@ function addImageToCarta($conDb, $fech, $image)
      //DELETE FROM CARTAS WHERE `CARTAS`.`ID` = 2
 
 
-function BorrarCartaFromFecha($conDB, $fec)
+function borrarCartaFromFecha($conDB, $fec)
 {
     //Bien
     $vectorTotal = array();
@@ -217,7 +292,7 @@ function addCartaByFechaAndDesc($conDB, $nom, $tag, $desc)
     return $conDB->lastInsertId();
   }
 
-  function ModificarCartaFromFecha($conDB, $nom, $fec, $newfec, $desc)
+  function modificarCartaFromFecha($conDB, $nom, $fec, $newfec, $desc)
   {
     $result =0;
     try

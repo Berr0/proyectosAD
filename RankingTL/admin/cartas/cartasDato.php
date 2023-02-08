@@ -40,7 +40,7 @@
             $db = conectarDB();
             //Export $_POST 
             $nom = $_POST['fechaCarta'];
-            $maz = BorrarCartaFromFecha($db, $nom);
+            $maz = borrarCartaFromFecha($db, $nom);
             echo "\n" . "El Borrar es: " .$nom;
             break;
         case 'Modificar':
@@ -49,7 +49,7 @@
             //Export $_POST 
             $nom = $_POST['fechaCarta'];
             $tag = $_POST['tagMod'];
-            $hort = ModificarCartaFromFecha($db, $nom,$tag,$newfec,$desc);
+            $hort = modificarCartaFromFecha($db, $nom,$tag,$newfec,$desc);
             echo "\n" . "El Modificar es: " . $tag;
             break;
     }
