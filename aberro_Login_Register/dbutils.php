@@ -1,7 +1,7 @@
 <?php
     function conectarDB(){
         try{
-            $db = new PDO("mysql:host=localhost;dbname=DB_PARQUE_OK;charset=utf8mb4","root","");
+            $db = new PDO("mysql:host=localhost;dbname=APP_PRUEBA;charset=utf8mb4","root","");
             $db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
             return $db;
         }
@@ -10,169 +10,40 @@
         }
     }
 
-    function getAllViajeros($conDb)
+    function getUsuariosPassword($conDb, $user, $passMd5)
 {
     //Bien
     $vectorTotal = array();
     try {
-        $sql = "SELECT * FROM JUGADORES ORDER BY PUNTOS DESC LIMIT 0,10 ";
+        $sql = "SELECT * FROM USUARIOS WHERE USUARIO =:usu";
         $stmt = $conDb->prepare($sql,array(PDO::ATTR_CURSOR=>PDO::CURSOR_FWDONLY));
-        $stmt -> execute(array());
-        while ($fila = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
-            $vectorTotal[] = $fila;
-        }
+        $stmt -> execute(array(":usu"=>$user,":pass"=>$passMd5));
+        $fila = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $ex) {
         echo ("Error al conectar con la base de datos".$ex->getMessage());
     }
-    return $vectorTotal;
-}
-function getAllViajes($conDb)
-{
-    //Bien
-    $vectorTotal = array();
-    try {
-        $sql = "SELECT * FROM JUGADORES ORDER BY PUNTOS DESC LIMIT 0,10 ";
-        $stmt = $conDb->prepare($sql,array(PDO::ATTR_CURSOR=>PDO::CURSOR_FWDONLY));
-        $stmt -> execute(array());
-        while ($fila = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
-            $vectorTotal[] = $fila;
-        }
-        } catch (PDOException $ex) {
-        echo ("Error al conectar con la base de datos".$ex->getMessage());
-    }
-    return $vectorTotal;
+    return $fila;
 }
 
-function getAllAtracciones($conDb)
-{
-    //Bien
-    $vectorTotal = array();
-    try {
-        $sql = "SELECT * FROM ATRACCIONES";
-        $stmt = $conDb->prepare($sql,array(PDO::ATTR_CURSOR=>PDO::CURSOR_FWDONLY));
-        $stmt -> execute(array());
-        while ($fila = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
-            $vectorTotal[] = $fila;
-        }
-        } catch (PDOException $ex) {
-        echo ("Error al conectar con la base de datos".$ex->getMessage());
-    }
-    return $vectorTotal;
-}
-function getViajesFromAtraccion($conDb, $nom)
-{
-    //Bien
-    $vectorTotal = array();
-    try {
-        $sql = "SELECT * FROM VIAJES WHERE ATRACCION = :NOM";
-        $stmt = $conDb->prepare($sql,array(PDO::ATTR_CURSOR=>PDO::CURSOR_FWDONLY));
-        $stmt -> execute(array(":NOM"=>$nom));
-        while ($fila = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
-            $vectorTotal[] = $fila;
-        }
-        } catch (PDOException $ex) {
-        echo ("Error al conectar con la base de datos".$ex->getMessage());
-    }
-    return $vectorTotal;
-}
 
-function getViajeFromAtraccion($conDb, $nom)
-{
-    //Bien
-    $vectorTotal = array();
-    try {
-        $sql = "SELECT * FROM VIAJES WHERE ATRACCION = ':NOM'";
-        $stmt = $conDb->prepare($sql,array(PDO::ATTR_CURSOR=>PDO::CURSOR_FWDONLY));
-        $stmt -> execute(array(":NOM"=>$nom));
-        while ($fila = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
-            $vectorTotal[] = $fila;
-        }
-        } catch (PDOException $ex) {
-        echo ("Error al conectar con la base de datos".$ex->getMessage());
-    }
-    return $vectorTotal;
-}
-
-function getAtraccionFromNombre($conDb, $nom)
-{
-    //Bien
-    $vectorTotal = array();
-    try {
-        $sql = "SELECT * FROM ATRACCIONES WHERE NOMBRE = :NOM";
-        $stmt = $conDb->prepare($sql,array(PDO::ATTR_CURSOR=>PDO::CURSOR_FWDONLY));
-        $stmt -> execute(array(":NOM"=>$nom));
-        while ($fila = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
-            $vectorTotal[] = $fila;
-        }
-        } catch (PDOException $ex) {
-        echo ("Error al conectar con la base de datos".$ex->getMessage());
-    }
-    return $vectorTotal;
-}
-
-function addAtraccionByNombreAndTematica($conDB, $nom, $them)
+function addUsuarioByNombre($conDB, $usu, $pass, $nombre, $apellido)
 {
     try
     {
-        
-      $sql = "INSERT INTO ATRACCIONES(NOMBRE,TEMATICA) VALUES (:NOMBRE,:THEM)";
+      $sql = "INSERT INTO USUARIOS(usuario,pass,nombre,apellido) VALUES (:usuario,:pass,:nombre,:apellido)";
       $stmt = $conDB->prepare($sql);
-      $stmt->bindParam(':NOMBRE', $nom);
-      $stmt->bindParam(':THEM', $them);
+      $stmt->bindParam(':usuario', $usu);
+      $stmt->bindParam(':pass', $pass);
+      $stmt->bindParam(':nombre', $nombre);
+      $stmt->bindParam(':apellido', $apellido);
       $stmt->execute();
      }
     catch (PDOException $ex)
     {
-      echo ("Error en insertar Atraccion".$ex->getMessage());
+      echo ("Error en insertarHortaliza".$ex->getMessage());
     }
     return $conDB->lastInsertId();
   }
-
-
-
-function borrarAtraccionFromNombre($conDB, $nom)
-{
-    //Bien
-    $vectorTotal = array();
-    try
-    {
-      $sql = "DELETE FROM ATRACCIONES WHERE NOMBRE=:NOM";
-      $stmt = $conDB->prepare($sql);
-      $stmt->bindParam(':NOM', $nom);
-      $stmt->execute();
-      $result = $stmt->rowCount();
-     }
-    catch (PDOException $ex)
-    {
-      echo ("Error en borrar Carta".$ex->getMessage());
-    }
-    return $result;
-  }
-
-
-  function modificarAtraccionFromNombre($conDB, $nom, $them)
-  {
-    $result =0;
-    try
-    {
-        //sql update where tag is updated in mazos table
-
-        // UPDATE `CARTAS` SET `FECHA` = '2491' WHERE `CARTAS`.`ID` = 1 
-        
-      $sql = "UPDATE `ATRACCIONES` SET NOMBRE` = $nom, TEMATICA=:them WHERE NOMBRE=:nom";
-      $stmt = $conDB->prepare($sql);
-      $stmt->bindParam(':nom', $nom,PDO::PARAM_STR);
-      $stmt->bindParam(':them', $them,PDO::PARAM_STR);
-      $stmt->execute();
-      $result = $stmt->rowCount();
-     }
-    catch (PDOException $ex)
-    {
-      echo ("Error en ModificarMazoFromNombre".$ex->getMessage());
-    }
-    return $result;
-  }
-
 
 function getMazoFromNombre($conDb, $nom)
 {
@@ -228,7 +99,7 @@ function addMazoByNombre($conDB, $nom, $tag, $desc)
   }
 
   //
-
+/*
   function addJugadorByPuntos($conDB, $punt)
 {
     try
@@ -328,7 +199,7 @@ function borrarMazoFromNombre($conDB, $nom)
   
   
   
-/*
+
 function getAllHortalizasFromTamAndColor($conDB, $tam,$color,$bool){
     $vectorTotal = array();
     try {
@@ -359,7 +230,6 @@ catch (PDOException $ex) {
     }
     return $vectorTotal;
 }
-*/
 
 
 //FUNCIONES DE CARTA
@@ -419,7 +289,8 @@ function borrarCartaFromFecha($conDB, $fec)
     return $result;
   }
 
-
+*/
+/*
 function addCartaByFechaAndDesc($conDB, $nom, $tag, $desc)
 {
     try

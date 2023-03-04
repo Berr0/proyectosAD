@@ -198,21 +198,22 @@ function BorrarCartaFromFecha($conDB, $fec)
   }
 
 
-function addCartaByFechaAndDesc($conDB, $nom, $tag, $desc)
+function addCartaByFechaAndDesc($conDB, $nom, $tag, $desc,$id_mazo)
 {
     try
     {
-        
-      $sql = "INSERT INTO MAZOS(NOMBRE,TAG,DESCRIPCION) VALUES (:NOMBRE,:TAG,:DESCR)";
+      $sql = "INSERT INTO CARTAS (DESCRIPCION, ID_MAZO, FECHA, IMAGEN) VALUES (:DESCR, :ID_MAZO ,:FECHA, :IMAGEN)";
       $stmt = $conDB->prepare($sql);
-      $stmt->bindParam(':NOMBRE', $nom);
+      $stmt->bindParam(':FECHA', $nom);
       $stmt->bindParam(':TAG', $tag);
+      $stmt->bindParam(':DESCR', $desc);
+      $stmt->bindParam(':ID_MAZO', $id_mazo);
       $stmt->bindParam(':DESCR', $desc);
       $stmt->execute();
      }
     catch (PDOException $ex)
     {
-      echo ("Error en insertarHortaliza".$ex->getMessage());
+      echo ("Error en insertar Carta".$ex->getMessage());
     }
     return $conDB->lastInsertId();
   }

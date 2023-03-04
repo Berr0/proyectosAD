@@ -53,7 +53,9 @@ $db = conectarDB();
     <br>
 
 
-    <input type="text" class="form-control" name="fechaCarta" id="txt" placeholder="Un nombre de mazo">
+    <input type="text" class="form-control" name="fechaCarta" id="txt" placeholder="Una fecha de carta">
+    <br>
+    <input type="text" class="form-control" name="mazoCarta" id="txt" placeholder="Un nombre de mazo">
     <br>
     <button id="btn" class="btn btn-primary form-control" type="submit">Go</button>
     <br><br>

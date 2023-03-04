@@ -47,7 +47,7 @@
             $db = conectarDB();
             //Export $_POST 
             $nom = $_POST['nombreMazo'];
-            $tag = $_POST['tagMod'];
+            $tag = "tag";
             $hort = modificarMazoFromNombre($db, $nom,$tag);
             echo "\n" . "El Modificar es: " . $tag;
             break;

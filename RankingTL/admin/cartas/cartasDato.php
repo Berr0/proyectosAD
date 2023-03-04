@@ -32,7 +32,8 @@
             $nom = $_POST['fechaCarta'];
             $tag = substr($nom, 0, 3);
             $desc = $_POST['desc'];
-            $hort = addCartaByFechaAndDesc($db, $nom, $tag, $desc);
+            $id_mazo = $_POST['mazoCarta'];
+            $hort = addCartaByFechaAndDesc($db, $nom, $tag, $desc, $id_mazo);
             echo "\n" . "El añadir es: " . $hort[0][0]["NOMBRE"].",". $tag;
             break;
         case 'Borrar':
