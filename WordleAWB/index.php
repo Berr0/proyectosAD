@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -102,50 +105,76 @@ body {
         margin-bottom: auto;
       }
 </style> 
-  </head>
-  <form >
-  <body>
-    <h1>
-      WORDLE_AWB
-    </h1>
+
+  
+</head>
+<body>
+  <h1>
+    WORDLE_AWB
+  </h1>
   <?php
-  if (isset($_POST['intentos'])) {
+  if (isset($_POST['intentos']) && !isset($_POST['skip'])) {
     $intentos = $_POST['intentos'];
-    $intentos = $intentos++;
+    $palabra = $_POST['word'];
+    $charsNum = strlen($palabra);
+    $letras = str_split($palabra);
+    $letrasEnPalabra = array();
+    for ($j=0; $j < $charsNum; $j++) {
+      if (isset($_POST['char'.$j])) {
+        if ($_POST['char'.$j] == $letras[$j]) {
+          $letrasEnPalabra[$j] = 'green';
+        } else if (strpos($palabra, $_POST['char'.$j]) !== false) {
+          $letrasEnPalabra[$j] = 'yellow';
+        } else {
+          $letrasEnPalabra[$j] = 'red';
+        }
+      } else {
+        $letrasEnPalabra[$j] = '';
+      }
+    }
   } else {
     $intentos = 1;
+    // Obtener una palabra aleatoria de la base de datos
+    $numPalabras = count(getAllPalabras($db)[0]);
+    $rand = rand(0, $numPalabras-1);
+    $palabra = getPalabraFromID($db, $rand+1);
+    $palabra = $palabra[0]["PALABRA"];
+    $charsNum = strlen($palabra);
+    $letras = str_split($palabra);
+    $letrasEnPalabra = array_fill(0, $charsNum, '');
   }
-  $rand = rand();
-  $Num_de_palabras = getAllPalabras($db);
-  $num = rand(1, count($Num_de_palabras[0]));
-  $palabra = getPalabraFromID($db,$num);
-  $word = $palabra[0]["PALABRA"];
-  $charsNum = strlen($word);
-  $letras = str_split($word);
-  echo $intentos;
-    echo '<br><br><div class="rank">'.($i+1).'.</div>';
-    echo '<div class="vr"></div>';
-    for ($j=0; $j < $charsNum; $j++) { 
-      echo '<input type="text" class="jugador-input" name="char'.$j.'" maxlength="1">';
-    }
-    echo '<div class="vr"></div><div class="score">' . $nom[$i]["PUNTOS"] . '</div><hr class="border border-danger border-2 opacity-50 hrEspecial">';
-    echo "<input type='hidden' value='$intentos' name='intentos'>"
+
+  // Mostrar el número de intentos
+  echo "Intento #$intentos<br><br>";
+
+  // Formulario con los inputs de letras
+  echo '<form method="POST">';
+  for ($j=0; $j < $charsNum; $j++) {
+    $color = $letrasEnPalabra[$j];
+    if ($color != '') {
+      echo '<input type="text" class="jugador-input" name="char'.$j.'" maxlength="1" value="'.$letras[$j].'" style="background-color: '.$color.';" disabled>';
+    } else
+
+{
+echo '<input type="text" class="jugador-input" name="char'.$j.'" maxlength="1" value="" required>';
+}
+}
+echo '<input type="hidden" name="intentos" value="'.($intentos+1).'">';
+echo '<input type="hidden" name="word" value="'.$palabra.'">';
+echo '<input type="submit" value="Comprobar">';
+echo '</form>';
+
+// Botón para saltar la palabra
+echo '<br><form method="POST">';
+echo '<input type="hidden" name="skip" value="1">';
+echo '<input type="submit" value="Saltar palabra">';
+echo '</form>';
+
+// Mostrar la palabra si se han acabado los intentos
+if ($intentos == 5) {
+echo '<br><h2>Lo siento, has perdido. La palabra era "'.$palabra.'"</h2>';
+}
+
 ?>
-<!-- 
-  Todo esto se ejecutaría al pulsar el boton 
-
-  Tendría que sacar la palabra y recorrerla y ver si esta está en el indice de los inputs, si no es fallo, luego 
-  revisar si existe en la palabra y en base a estos dos ifs, poner el color del input como amarillo/rojo/verde
-------------------------------------------------------------------------------------------------------------------------
-
-  Para montar esto, tendremos que poner una etiqueta form que permita pasar por el post los datos que nos interesen
-  Lo vamos filtrando con un hidden que tendrá un valor incremental por cada intento
-
- -->
-<br>
-
-
-  <button class="btn btn-primary">Adivinar</button>
-  </body>
-  </form>
+</body>
 </html>
