@@ -61,6 +61,7 @@ else if (isset($_POST['bActualizaciones']))
         $accionActualizarCheckeados=1;
         try
         {
+          //usuI == Columna usuario // aNombreClave[0] == Columna nombre // aNombreClave[1] == clave // aNombreClave[2] == check
       execute_query($conexion, "UPDATE usuarios SET nombre=:NOMBRE,clave=:CLAVE WHERE usuario=:USUARIO",
                  array(":USUARIO" => $usuI, ":NOMBRE" => $aNombreClave[0], ":CLAVE" =>$aNombreClave[1]),"PDO::FETCH_ASSOC",false);
         }
@@ -151,6 +152,7 @@ $usuarios = execute_query($conexion, "SELECT * FROM usuarios");
         </div>
         <div class="col-4">
           <div>
+  <!-- Sacamos el color aleatoriamente con la funcion obtenerColor del archivo phpUtils.php-->
       <div class="alert alert-<?php echo obtenerColor(); ?> alert-dismissible fade show" role="alert">
         <strong>Usuario logeado: <?php echo $_SESSION["userApp"]; ?><span class="float-end"><a href="logout.php">Cerrar sesión </a></span></strong>
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -170,7 +172,7 @@ $usuarios = execute_query($conexion, "SELECT * FROM usuarios");
         </thead>
         <tbody>
           <?php
-          
+          // Rellenamos la tabla recorriendo los usuarios que hemos sacado por BBDD, sacamos de cada usuario sus atributos y los metermos en el $_post con el atributo name.
             foreach($usuarios as $usuario){
               echo "<tr>";
                 $user = $usuario["usuario"] ;
@@ -204,7 +206,6 @@ $usuarios = execute_query($conexion, "SELECT * FROM usuarios");
           Borrar
         </button>
         <a name="bAdmin2" href="admin2.php" class="btn btn-success">Admin2</a>
-
       </form>
     </div>
   </body>
